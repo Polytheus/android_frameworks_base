@@ -1269,6 +1269,29 @@ public class PhoneNumberUtils
     }
 
     /**
+     * @hide
+     * LG Change */
+    public static int getEmergencyCategory(String number) {
+
+        if( number.equals("112") )
+          return 1;
+        if( number.equals("911") )
+          return 4;
+        if( number.equals("119") )
+          return 4;
+        if( number.equals("122") )
+          return 8;
+        if( number.equals("113") )
+          return 3;
+        if( number.equals("125") )
+          return 9;
+        if( number.equals("127") )
+          return 17;
+        if( number.equals("111") )
+          return 7;
+        return 0;
+    }
+    /**
      * isVoiceMailNumber: checks a given number against the voicemail
      *   number provided by the RIL and SIM card. The caller must have
      *   the READ_PHONE_STATE credential.

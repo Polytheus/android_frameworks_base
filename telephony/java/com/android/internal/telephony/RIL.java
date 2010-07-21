@@ -792,6 +792,14 @@ public final class RIL extends BaseCommands implements CommandsInterface {
 
         rr.mp.writeString(address);
         rr.mp.writeInt(clirMode);
+        rr.mp.writeInt(0); /* whichLine */
+        if( !PhoneNumberUtils.isEmergencyNumber(address) ) {
+          rr.mp.writeInt(0);
+          rr.mp.writeInt(0);
+        } else {
+          rr.mp.writeInt(1);
+          rr.mp.writeInt(PhoneNumberUtils.getEmergencyCategory(address));
+        }
 
         if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
 
