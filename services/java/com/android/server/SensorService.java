@@ -84,15 +84,11 @@ class SensorService extends ISensorService.Stub {
                     if (hasSensor(sensor)) {
                         removeSensor(sensor);
                         try {
-                            deactivateIfUnusedLocked(sensor);
+                            deactivateIfUnused(sensor);
                         } catch (RemoteException e) {
                             Log.w(TAG, "RemoteException in binderDied");
                         }
                     }
-                }
-                if (mListeners.size() == 0) {
-                    _sensors_control_wake();
-                    _sensors_control_close();
                 }
                 mListeners.notify();
             }
@@ -106,12 +102,9 @@ class SensorService extends ISensorService.Stub {
     }
     
     public Bundle getDataChannel() throws RemoteException {
-        // synchronize so we do not require sensor HAL to be thread-safe.
-        synchronized(mListeners) {
-            return _sensors_control_open();
-        }
+        return _sensors_control_open();
     }
-
+    
     public boolean enableSensor(IBinder binder, String name, int sensor, int enable)
              throws RemoteException {
         if (localLOGV) Log.d(TAG, "enableSensor " + name + "(#" + sensor + ") " + enable);
@@ -170,7 +163,7 @@ class SensorService extends ISensorService.Stub {
                 l.addSensor(sensor, enable);
             } else {
                 l.removeSensor(sensor);
-                deactivateIfUnusedLocked(sensor);
+                deactivateIfUnused(sensor);
                 if (l.mSensors == 0) {
                     mListeners.remove(l);
                     binder.unlinkToDeath(l, 0);
@@ -180,13 +173,12 @@ class SensorService extends ISensorService.Stub {
             
             if (mListeners.size() == 0) {
                 _sensors_control_wake();
-                _sensors_control_close();
             }
         }        
         return true;
     }
 
-    private void deactivateIfUnusedLocked(int sensor) throws RemoteException {
+    void deactivateIfUnused(int sensor) throws RemoteException {
         int size = mListeners.size();
         for (int i=0 ; i<size ; i++) {
             if (mListeners.get(i).hasSensor(sensor))
@@ -195,11 +187,10 @@ class SensorService extends ISensorService.Stub {
         _sensors_control_activate(sensor, false);
     }
 
-    private ArrayList<Listener> mListeners = new ArrayList<Listener>();
+    ArrayList<Listener> mListeners = new ArrayList<Listener>();
 
     private static native int _sensors_control_init();
     private static native Bundle _sensors_control_open();
-    private static native int _sensors_control_close();
     private static native boolean _sensors_control_activate(int sensor, boolean activate);
     private static native int _sensors_control_set_delay(int ms);
     private static native int _sensors_control_wake();
