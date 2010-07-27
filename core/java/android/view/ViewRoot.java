@@ -408,7 +408,7 @@ public final class ViewRoot extends Handler implements ViewParent,
                 }
 
                 boolean restore = false;
-                if (mTranslator != null) {
+                if (attrs != null && mTranslator != null) {
                     restore = true;
                     attrs.backup();
                     mTranslator.translateWindowLayout(attrs);
@@ -422,7 +422,7 @@ public final class ViewRoot extends Handler implements ViewParent,
                 mSoftInputMode = attrs.softInputMode;
                 mWindowAttributesChanged = true;
                 mAttachInfo.mRootView = view;
-                mAttachInfo.mScalingRequired = mTranslator != null;
+                mAttachInfo.mScalingRequired = mTranslator == null ? false : true;
                 mAttachInfo.mApplicationScale =
                         mTranslator == null ? 1.0f : mTranslator.applicationScale;
                 if (panelParentView != null) {
@@ -680,7 +680,6 @@ public final class ViewRoot extends Handler implements ViewParent,
             // object is not initialized to its backing store, but soon it
             // will be (assuming the window is visible).
             attachInfo.mSurface = mSurface;
-            attachInfo.mTranslucentWindow = lp.format != PixelFormat.OPAQUE;
             attachInfo.mHasWindowFocus = false;
             attachInfo.mWindowVisibility = viewVisibility;
             attachInfo.mRecomputeGlobalAttributes = false;

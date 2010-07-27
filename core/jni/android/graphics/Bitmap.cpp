@@ -317,11 +317,6 @@ static jboolean Bitmap_hasAlpha(JNIEnv* env, jobject, SkBitmap* bitmap) {
     return !bitmap->isOpaque();
 }
 
-static void Bitmap_setHasAlpha(JNIEnv* env, jobject, SkBitmap* bitmap,
-                               jboolean hasAlpha) {
-    bitmap->setIsOpaque(!hasAlpha);
-}
-
 ///////////////////////////////////////////////////////////////////////////////
 
 static jobject Bitmap_createFromParcel(JNIEnv* env, jobject, jobject parcel) {
@@ -551,7 +546,6 @@ static JNINativeMethod gBitmapMethods[] = {
     {   "nativeRowBytes",           "(I)I", (void*)Bitmap_rowBytes },
     {   "nativeConfig",             "(I)I", (void*)Bitmap_config },
     {   "nativeHasAlpha",           "(I)Z", (void*)Bitmap_hasAlpha },
-    {   "nativeSetHasAlpha",        "(IZ)V", (void*)Bitmap_setHasAlpha },
     {   "nativeCreateFromParcel",
         "(Landroid/os/Parcel;)Landroid/graphics/Bitmap;",
         (void*)Bitmap_createFromParcel },
