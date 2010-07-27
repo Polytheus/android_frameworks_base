@@ -81,7 +81,7 @@ import com.android.server.am.BatteryStatsService;
  */
 public class WifiService extends IWifiManager.Stub {
     private static final String TAG = "WifiService";
-    private static final boolean DBG = false;
+    private static final boolean DBG = true;
     private static final Pattern scanResultPattern = Pattern.compile("\t+");
     private final WifiStateTracker mWifiStateTracker;
 
@@ -343,7 +343,12 @@ public class WifiService extends IWifiManager.Stub {
         setWifiEnabledState(enable ? WIFI_STATE_ENABLING : WIFI_STATE_DISABLING, uid);
 
         if (enable) {
-            if (!WifiNative.loadDriver()) {
+            //TODO: LG's change (see smali file)
+            //wlan_country is looked up in a list
+            //its set to 1 if not found
+            int wlan_country = 2;
+            Log.w(TAG,"TODO: Set the right wlan_country");
+            if (!WifiNative.loadDriver(wlan_country)) {
                 Log.e(TAG, "Failed to load Wi-Fi driver.");
                 setWifiEnabledState(WIFI_STATE_UNKNOWN, uid);
                 return false;
@@ -489,7 +494,7 @@ public class WifiService extends IWifiManager.Stub {
      */
     public List<WifiConfiguration> getConfiguredNetworks() {
         enforceAccessPermission();
-        String listStr;
+        String listStr = null;
         /*
          * We don't cache the list, because we want to allow
          * for the possibility that the configuration file
@@ -497,7 +502,11 @@ public class WifiService extends IWifiManager.Stub {
          * such as the wpa_cli command line program.
          */
         synchronized (mWifiStateTracker) {
-            listStr = WifiNative.listNetworksCommand();
+            try {
+                listStr = new String(WifiNative.listNetworksCommand(),"KSC5601");
+            } catch(java.io.UnsupportedEncodingException e) {
+                Log.e(TAG, "KSC5601 Error after listNetworksCommand");
+            }
         }
         List<WifiConfiguration> networks =
             new ArrayList<WifiConfiguration>();
@@ -740,15 +749,19 @@ public class WifiService extends IWifiManager.Stub {
              * for the validity of the ID up front.
              */
 
+            try {
             if (config.SSID != null &&
-                !WifiNative.setNetworkVariableCommand(
+                !WifiNative.setNetworkVariableCommand_byte(
                     netId,
                     WifiConfiguration.ssidVarName,
-                    config.SSID)) {
+                    config.SSID.getBytes("KSC5601"))) {
                 if (DBG) {
                     Log.d(TAG, "failed to set SSID: "+config.SSID);
                 }
                 break setVariables;
+            }
+            } catch( java.io.UnsupportedEncodingException e) {
+                Log.e(TAG,"KSC5601 Error in addOrUpdate");
             }
 
             if (config.BSSID != null &&
@@ -1045,9 +1058,13 @@ public class WifiService extends IWifiManager.Stub {
      */
     public List<ScanResult> getScanResults() {
         enforceAccessPermission();
-        String reply;
+        String reply = null;
         synchronized (mWifiStateTracker) {
-            reply = WifiNative.scanResultsCommand();
+            try {
+                reply = new String(WifiNative.scanResultsCommand(),"KSC5601");
+            } catch(java.io.UnsupportedEncodingException e) {
+                Log.e(TAG, "KSC5601 Error after listNetworksCommand");
+            }
         }
         if (reply == null) {
             return null;

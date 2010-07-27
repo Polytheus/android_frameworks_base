@@ -1097,7 +1097,7 @@ public class WifiStateTracker extends NetworkStateTracker {
 
             case EVENT_POLL_INTERVAL:
                 if (mWifiInfo.getSupplicantState() != SupplicantState.UNINITIALIZED) {
-                    requestPolledInfo(mWifiInfo, true);
+                    requestPolledInfo(mWifiInfo);
                     checkPollTimer();
                 }
                 break;
@@ -1350,7 +1350,7 @@ public class WifiStateTracker extends NetworkStateTracker {
      */
     public WifiInfo requestConnectionInfo() {
         requestConnectionStatus(mWifiInfo);
-        requestPolledInfo(mWifiInfo, false);
+        requestPolledInfo(mWifiInfo);
         return mWifiInfo;
     }
 
@@ -1405,9 +1405,9 @@ public class WifiStateTracker extends NetworkStateTracker {
      * Get the dynamic information that is not reported via events.
      * @param info the object into which the information should be captured.
      */
-    private synchronized void requestPolledInfo(WifiInfo info, boolean polling)
+    private synchronized void requestPolledInfo(WifiInfo info)
     {
-        int newRssi = (polling ? WifiNative.getRssiApproxCommand() : WifiNative.getRssiCommand());
+        int newRssi = WifiNative.getRssiCommand();
         if (newRssi != -1 && -200 < newRssi && newRssi < 256) { // screen out invalid values
             /* some implementations avoid negative values by adding 256
              * so we need to adjust for that here.

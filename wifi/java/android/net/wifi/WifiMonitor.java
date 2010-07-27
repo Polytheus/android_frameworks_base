@@ -149,8 +149,12 @@ public class WifiMonitor {
 
             //noinspection InfiniteLoopStatement
             for (;;) {
-                String eventStr = WifiNative.waitForEvent();
-
+                String eventStr = null;
+                try { 
+                  eventStr = new String(WifiNative.waitForEvent(),"KSC5601");
+                } catch(java.io.UnsupportedEncodingException e) {
+                  Log.e(TAG, "KSC5601 Error in MonitorThread");
+                }
                 if (eventStr == null) {
                     continue;
                 }

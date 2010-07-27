@@ -37,7 +37,7 @@ public class WifiNative {
     
     public native static String getErrorString(int errorCode);
 
-    public native static boolean loadDriver();
+    public native static boolean loadDriver(int wlan_country);
     
     public native static boolean unloadDriver();
 
@@ -55,13 +55,17 @@ public class WifiNative {
     
     public native static boolean setScanModeCommand(boolean setActive);
 
-    public native static String listNetworksCommand();
+    public native static byte[] listNetworksCommand();
 
     public native static int addNetworkCommand();
 
     public native static boolean setNetworkVariableCommand(int netId, String name, String value);
 
     public native static String getNetworkVariableCommand(int netId, String name);
+
+    public native static boolean setNetworkVariableCommand_byte(int netId, String name, byte[] value);
+
+    public native static byte[] getNetworkVariableCommand_byte(int netId, String name);
 
     public native static boolean removeNetworkCommand(int netId);
 
@@ -76,16 +80,15 @@ public class WifiNative {
     public native static boolean disconnectCommand();
 
     public native static String statusCommand();
+    public native static String statusCommand_byte();
 
     public native static int getRssiCommand();
-
-    public native static int getRssiApproxCommand();
 
     public native static int getLinkSpeedCommand();
 
     public native static String getMacAddressCommand();
 
-    public native static String scanResultsCommand();
+    public native static byte[] scanResultsCommand();
 
     public native static boolean startDriverCommand();
 
@@ -148,5 +151,6 @@ public class WifiNative {
      * Wait for the supplicant to send an event, returning the event string.
      * @return the event string sent by the supplicant.
      */
-    public native static String waitForEvent();
+    public native static byte[] waitForEvent();
+    public native static boolean setHostWakeup(int a); /*LG added this function but did not use it*/
 }
