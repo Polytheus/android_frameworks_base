@@ -1508,13 +1508,10 @@ public class StatusBarService extends IStatusBar.Stub
 
         /// ---------- Expanded View --------------
         pixelFormat = PixelFormat.TRANSLUCENT;
-        bg = mExpandedView.getBackground();
-        if (bg != null) {
-            pixelFormat = bg.getOpacity();
-            if (pixelFormat != PixelFormat.TRANSLUCENT) {
-                // we want good-looking gradients, so we force a 8-bits per
-                // pixel format.
-                pixelFormat = PixelFormat.RGBX_8888;
+        if (false) {
+            bg = mExpandedView.getBackground();
+            if (bg != null) {
+                pixelFormat = bg.getOpacity();
             }
         }
 
