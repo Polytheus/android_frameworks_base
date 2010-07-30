@@ -346,19 +346,21 @@ public class WifiService extends IWifiManager.Stub {
             //TODO: LG's change (see smali file)
             //wlan_country is looked up in a list
             //its set to 1 if not found
-            int wlan_country = 2;
+            int wlan_country = 1;
             Log.w(TAG,"TODO: Set the right wlan_country");
             if (!WifiNative.loadDriver(wlan_country)) {
                 Log.e(TAG, "Failed to load Wi-Fi driver.");
                 setWifiEnabledState(WIFI_STATE_UNKNOWN, uid);
                 return false;
             }
+            Log.i(TAG,"Loaded driver");
             if (!WifiNative.startSupplicant()) {
                 WifiNative.unloadDriver();
                 Log.e(TAG, "Failed to start supplicant daemon.");
                 setWifiEnabledState(WIFI_STATE_UNKNOWN, uid);
                 return false;
             }
+            Log.i(TAG,"Loaded supplicant");
             registerForBroadcasts();
             mWifiStateTracker.startEventLoop();
         } else {
@@ -537,6 +539,7 @@ public class WifiService extends IWifiManager.Stub {
                readNetworkVariables(config);
            }
            networks.add(config);
+           Log.w(TAG, "Read network " + config.toString());
        }
 
         return networks;
@@ -691,7 +694,8 @@ public class WifiService extends IWifiManager.Stub {
                 }
             }
         }
-
+        
+        /*
         for (WifiConfiguration.EnterpriseField field :
                 config.enterpriseFields) {
             value = WifiNative.getNetworkVariableCommand(netId,
@@ -700,6 +704,7 @@ public class WifiService extends IWifiManager.Stub {
                 field.setValue(value);
             }
         }
+        */
     }
 
     /**
@@ -718,6 +723,8 @@ public class WifiService extends IWifiManager.Stub {
         boolean newNetwork = netId == -1;
         boolean doReconfig;
         int currentPriority;
+        
+        Log.w(TAG,"addOrUpdateNetwork: " + config.toString());
         // networkId of -1 means we want to create a new network
         if (newNetwork) {
             netId = WifiNative.addNetworkCommand();
@@ -777,7 +784,15 @@ public class WifiService extends IWifiManager.Stub {
 
             String allowedKeyManagementString =
                 makeString(config.allowedKeyManagement, WifiConfiguration.KeyMgmt.strings);
-            if (config.allowedKeyManagement.cardinality() != 0 &&
+            
+            if( config.allowedKeyManagement.cardinality() == 0
+             && config.preSharedKey != null && !config.preSharedKey.equals("*") ) {
+                //Fix for lg's wpa_supplicant. We HAVE to set key_mgmt if we use WPA/WPA2,
+                //even allowedKeyManagement is empty on recent android firmwares
+                allowedKeyManagementString = "WPA-PSK";
+            }
+
+            if (allowedKeyManagementString != "" &&
                 !WifiNative.setNetworkVariableCommand(
                     netId,
                     WifiConfiguration.KeyMgmt.varName,
@@ -791,7 +806,14 @@ public class WifiService extends IWifiManager.Stub {
 
             String allowedProtocolsString =
                 makeString(config.allowedProtocols, WifiConfiguration.Protocol.strings);
-            if (config.allowedProtocols.cardinality() != 0 &&
+            if( config.allowedKeyManagement.cardinality() == 0
+             && config.preSharedKey != null && !config.preSharedKey.equals("*") ) {
+                //Fix for lg's wpa_supplicant. We HAVE to set key_mgmt if we use WPA/WPA2,
+                //even allowedKeyManagement is empty on recent android firmwares
+                allowedProtocolsString = "WPA RSN"; /* This is for WPA and WPA2(=RSN) */
+            }
+
+            if (allowedProtocolsString != "" &&
                 !WifiNative.setNetworkVariableCommand(
                     netId,
                     WifiConfiguration.Protocol.varName,
@@ -819,7 +841,13 @@ public class WifiService extends IWifiManager.Stub {
 
             String allowedPairwiseCiphersString =
                 makeString(config.allowedPairwiseCiphers, WifiConfiguration.PairwiseCipher.strings);
-            if (config.allowedPairwiseCiphers.cardinality() != 0 &&
+            if( config.allowedKeyManagement.cardinality() == 0
+             && config.preSharedKey != null && !config.preSharedKey.equals("*") ) {
+                //Fix for lg's wpa_supplicant. We HAVE to set key_mgmt if we use WPA/WPA2,
+                //even allowedKeyManagement is empty on recent android firmwares
+                allowedPairwiseCiphersString = "CCMP TKIP";
+            }
+            if (allowedPairwiseCiphersString != "" &&
                 !WifiNative.setNetworkVariableCommand(
                     netId,
                     WifiConfiguration.PairwiseCipher.varName,
@@ -833,7 +861,13 @@ public class WifiService extends IWifiManager.Stub {
 
             String allowedGroupCiphersString =
                 makeString(config.allowedGroupCiphers, WifiConfiguration.GroupCipher.strings);
-            if (config.allowedGroupCiphers.cardinality() != 0 &&
+            if( config.allowedKeyManagement.cardinality() == 0
+             && config.preSharedKey != null && !config.preSharedKey.equals("*") ) {
+                //Fix for lg's wpa_supplicant. We HAVE to set key_mgmt if we use WPA/WPA2,
+                //even allowedKeyManagement is empty on recent android firmwares
+                allowedGroupCiphersString = "CCMP TKIP";
+            }
+            if (allowedGroupCiphersString != "" &&
                 !WifiNative.setNetworkVariableCommand(
                     netId,
                     WifiConfiguration.GroupCipher.varName,
@@ -915,7 +949,7 @@ public class WifiService extends IWifiManager.Stub {
                 }
                 break setVariables;
             }
-
+            /*
             for (WifiConfiguration.EnterpriseField field
                     : config.enterpriseFields) {
                 String varName = field.varName();
@@ -931,6 +965,7 @@ public class WifiService extends IWifiManager.Stub {
                     break setVariables;
                 }
             }
+            */
 
             return netId;
         }
