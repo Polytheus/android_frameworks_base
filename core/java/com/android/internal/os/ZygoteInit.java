@@ -579,6 +579,10 @@ public class ZygoteInit {
             registerZygoteSocket();
             EventLog.writeEvent(LOG_BOOT_PROGRESS_PRELOAD_START,
                 SystemClock.uptimeMillis());
+
+            //Overwrite some of the native functions
+            System.loadLibrary("android_runtime_eclair");
+
             preloadClasses();
             //cacheRegisterMaps();
             preloadResources();
