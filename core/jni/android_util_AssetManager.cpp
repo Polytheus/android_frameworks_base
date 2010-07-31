@@ -110,6 +110,7 @@ jint copyValue(JNIEnv* env, jobject outValue, const ResTable* table,
 // ----------------------------------------------------------------------------
 
 // this guy is exported to other jni routines
+__attribute__ ((visibility("default")))
 AssetManager* assetManagerForJavaObject(JNIEnv* env, jobject obj)
 {
     AssetManager* am = (AssetManager*)env->GetIntField(obj, gAssetManagerOffsets.mObject);

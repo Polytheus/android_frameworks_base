@@ -31,7 +31,7 @@
 
 namespace android {
     
-class AndroidRuntime
+class __attribute__ ((visibility("default"))) AndroidRuntime
 {
 public:
     AndroidRuntime();

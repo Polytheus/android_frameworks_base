@@ -20,33 +20,55 @@ ifneq ($(USE_CUSTOM_RUNTIME_HEAP_MAX),)
 endif
 
 LOCAL_CFLAGS += -DGL_GLEXT_PROTOTYPES -DEGL_EGLEXT_PROTOTYPES
-
 LOCAL_SRC_FILES:= \
-	ActivityManager.cpp \
-	AndroidRuntime.cpp \
-	CursorWindow.cpp \
-	Time.cpp \
+    ActivityManager.cpp \
+    AndroidRuntime.cpp \
+    CursorWindow.cpp \
+    Time.cpp \
+    android_database_CursorWindow.cpp \
+    android_database_SQLiteDebug.cpp \
+    android_database_SQLiteDatabase.cpp \
+    android_database_SQLiteProgram.cpp \
+    android_database_SQLiteQuery.cpp \
+    android_database_SQLiteStatement.cpp \
+    android_util_Process.cpp \
+    android_os_MemoryFile.cpp \
+    android_net_NetUtils.cpp \
+    android/graphics/Typeface.cpp \
+	android/graphics/NIOBuffer.cpp \
+	android_util_Binder.cpp \
+	android_util_AssetManager.cpp \
+	android_nio_utils.cpp \
+	android/graphics/Canvas.cpp \
+	android/graphics/CreateJavaOutputStreamAdaptor.cpp \
+	com_android_internal_os_ZygoteInit.cpp \
+	android/graphics/Graphics.cpp \
+	android/graphics/Paint.cpp \
+	android/graphics/Bitmap.cpp \
+	android/graphics/BitmapFactory.cpp \
+	android/graphics/NinePatch.cpp \
+	android/graphics/NinePatchImpl.cpp \
+
+
+
+#LOCAL_CFLAGS += -fvisibility=hidden
+
+#Remove below if you move it up
+OLD_LOCAL_SRC_FILES:= \
 	com_google_android_gles_jni_EGLImpl.cpp \
 	com_google_android_gles_jni_GLImpl.cpp.arm \
+	android_view_Surface.cpp \
 	android_opengl_GLES10.cpp \
 	android_opengl_GLES10Ext.cpp \
 	android_opengl_GLES11.cpp \
 	android_opengl_GLES11Ext.cpp \
-	android_database_CursorWindow.cpp \
-	android_database_SQLiteDebug.cpp \
-	android_database_SQLiteDatabase.cpp \
-	android_database_SQLiteProgram.cpp \
-	android_database_SQLiteQuery.cpp \
-	android_database_SQLiteStatement.cpp \
 	android_emoji_EmojiFactory.cpp \
 	android_view_Display.cpp \
-	android_view_Surface.cpp \
 	android_view_ViewRoot.cpp \
 	android_text_AndroidCharacter.cpp \
 	android_text_KeyCharacterMap.cpp \
 	android_os_Debug.cpp \
 	android_os_FileUtils.cpp \
-	android_os_MemoryFile.cpp \
 	android_os_ParcelFileDescriptor.cpp \
 	android_os_Power.cpp \
 	android_os_StatFs.cpp \
@@ -55,38 +77,24 @@ LOCAL_SRC_FILES:= \
 	android_os_UEventObserver.cpp \
 	android_os_Hardware.cpp \
 	android_net_LocalSocketImpl.cpp \
-	android_net_NetUtils.cpp \
 	android_net_wifi_Wifi.cpp \
-	android_nio_utils.cpp \
 	android_pim_EventRecurrence.cpp \
 	android_text_format_Time.cpp \
 	android_security_Md5MessageDigest.cpp \
-	android_util_AssetManager.cpp \
-	android_util_Binder.cpp \
 	android_util_EventLog.cpp \
 	android_util_Log.cpp \
 	android_util_FloatMath.cpp \
-	android_util_Process.cpp \
 	android_util_StringBlock.cpp \
 	android_util_XmlBlock.cpp \
 	android_util_Base64.cpp \
-	android/graphics/Bitmap.cpp \
-	android/graphics/BitmapFactory.cpp \
 	android/graphics/Camera.cpp \
-	android/graphics/Canvas.cpp \
 	android/graphics/ColorFilter.cpp \
 	android/graphics/DrawFilter.cpp \
-	android/graphics/CreateJavaOutputStreamAdaptor.cpp \
-	android/graphics/Graphics.cpp \
 	android/graphics/Interpolator.cpp \
 	android/graphics/LayerRasterizer.cpp \
 	android/graphics/MaskFilter.cpp \
 	android/graphics/Matrix.cpp \
 	android/graphics/Movie.cpp \
-	android/graphics/NIOBuffer.cpp \
-	android/graphics/NinePatch.cpp \
-	android/graphics/NinePatchImpl.cpp \
-	android/graphics/Paint.cpp \
 	android/graphics/Path.cpp \
 	android/graphics/PathMeasure.cpp \
 	android/graphics/PathEffect.cpp \
@@ -96,7 +104,6 @@ LOCAL_SRC_FILES:= \
 	android/graphics/Rasterizer.cpp \
 	android/graphics/Region.cpp \
 	android/graphics/Shader.cpp \
-	android/graphics/Typeface.cpp \
 	android/graphics/Xfermode.cpp \
 	android_media_AudioRecord.cpp \
 	android_media_AudioSystem.cpp \
@@ -120,7 +127,6 @@ LOCAL_SRC_FILES:= \
 	android_message_digest_sha1.cpp \
 	android_ddm_DdmHandleNativeHeap.cpp \
 	android_location_GpsLocationProvider.cpp \
-	com_android_internal_os_ZygoteInit.cpp \
 	com_android_internal_graphics_NativeUtils.cpp \
 	android_backup_BackupDataInput.cpp \
 	android_backup_BackupDataOutput.cpp \
@@ -205,120 +211,4 @@ endif
 LOCAL_MODULE:= libandroid_runtime
 include $(BUILD_SHARED_LIBRARY)
 
-include $(CLEAR_VARS)
-
-#this is all copied from above
-LOCAL_CFLAGS += -DHAVE_CONFIG_H -DKHTML_NO_EXCEPTIONS -DGKWQ_NO_JAVA
-LOCAL_CFLAGS += -DNO_SUPPORT_JS_BINDING -DQT_NO_WHEELEVENT -DKHTML_NO_XBL
-LOCAL_CFLAGS += -U__APPLE__
-
-ifeq ($(TARGET_ARCH), arm)
-    LOCAL_CFLAGS += -DPACKED="__attribute__ ((packed))"
-else
-    LOCAL_CFLAGS += -DPACKED=""
-endif
-
-ifeq ($(WITH_JIT),true)
-    LOCAL_CFLAGS += -DWITH_JIT
-endif
-
-ifneq ($(USE_CUSTOM_RUNTIME_HEAP_MAX),)
-  LOCAL_CFLAGS += -DCUSTOM_RUNTIME_HEAP_MAX=$(USE_CUSTOM_RUNTIME_HEAP_MAX)
-endif
-
-LOCAL_CFLAGS += -DGL_GLEXT_PROTOTYPES -DEGL_EGLEXT_PROTOTYPES
-LOCAL_C_INCLUDES += \
-    $(JNI_H_INCLUDE) \
-    $(LOCAL_PATH)/android/graphics \
-    $(call include-path-for, bluedroid) \
-    $(call include-path-for, libhardware)/hardware \
-    $(call include-path-for, libhardware_legacy)/hardware_legacy \
-    $(LOCAL_PATH)/../../include/ui \
-    $(LOCAL_PATH)/../../include/utils \
-    external/skia/include/core \
-    external/skia/include/effects \
-    external/skia/include/images \
-    external/skia/src/ports \
-    external/skia/include/utils \
-    external/sqlite/dist \
-    external/sqlite/android \
-    external/expat/lib \
-    external/openssl/include \
-    external/tremor/Tremor \
-    external/icu4c/i18n \
-    external/icu4c/common \
-    frameworks/opt/emoji
-
-LOCAL_SHARED_LIBRARIES := \
-    libandroid_runtime \
-	libexpat \
-    libnativehelper \
-    libcutils \
-    libutils \
-    libbinder \
-    libnetutils \
-    libui \
-    libskiagl \
-    libskia \
-    libsqlite \
-    libdvm \
-    libEGL \
-    libGLESv1_CM \
-    libhardware \
-    libhardware_legacy \
-    libsonivox \
-    libcrypto \
-    libssl \
-    libicuuc \
-    libicui18n \
-    libicudata \
-    libmedia \
-    libwpa_client
-
-ifeq ($(BOARD_HAVE_BLUETOOTH),true)
-LOCAL_C_INCLUDES += \
-    external/dbus \
-    system/bluetooth/bluez-clean-headers
-LOCAL_CFLAGS += -DHAVE_BLUETOOTH
-LOCAL_SHARED_LIBRARIES += libbluedroid libdbus
-endif
-
-ifneq ($(TARGET_SIMULATOR),true)
-LOCAL_SHARED_LIBRARIES += \
-    libdl
-  # we need to access the private Bionic header
-  # <bionic_tls.h> in com_google_android_gles_jni_GLImpl.cpp
-  LOCAL_CFLAGS += -I$(LOCAL_PATH)/../../../../bionic/libc/private
-endif
-
-LOCAL_LDLIBS += -lpthread -ldl
-
-ifeq ($(TARGET_SIMULATOR),true)
-ifeq ($(TARGET_OS)-$(TARGET_ARCH),linux-x86)
-LOCAL_LDLIBS += -lrt
-endif
-endif
-
-ifeq ($(WITH_MALLOC_LEAK_CHECK),true)
-    LOCAL_CFLAGS += -DMALLOC_LEAK_CHECK
-endif
-
-#Modified part
-LOCAL_SRC_FILES:= \
-	OnLoad.cpp \
-    android_database_CursorWindow.cpp \
-    android_database_SQLiteDebug.cpp \
-    android_database_SQLiteDatabase.cpp \
-    android_database_SQLiteProgram.cpp \
-    android_database_SQLiteQuery.cpp \
-    android_database_SQLiteStatement.cpp \
-	android_util_Process.cpp \
-	android_os_MemoryFile.cpp \
-	android_net_NetUtils.cpp \
-	android/graphics/Typeface.cpp
-LOCAL_CFLAGS += -fvisibility=hidden
-LOCAL_MODULE:= libandroid_runtime_eclair
-include $(BUILD_SHARED_LIBRARY)
-
 include $(call all-makefiles-under,$(LOCAL_PATH))
-

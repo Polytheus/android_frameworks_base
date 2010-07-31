@@ -27,6 +27,7 @@ const uint32_t OPEN_CONTENT_URI_TRANSACTION = IBinder::FIRST_CALL_TRANSACTION + 
 
 // Perform ContentProvider.openFile() on the given URI, returning
 // the resulting native file descriptor.  Returns < 0 on error.
+__attribute__ ((visibility("default")))
 int openContentProviderFile(const String16& uri)
 {
     int fd = -1;

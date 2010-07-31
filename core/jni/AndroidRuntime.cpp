@@ -43,7 +43,7 @@
 #include <signal.h>
 #include <dirent.h>
 #include <assert.h>
-
+#include <dlfcn.h>
 
 using namespace android;
 
@@ -1113,17 +1113,22 @@ static void quickTest(void* arg)
 #endif
 
 #ifdef NDEBUG
-    #define REG_JNI(name)      { name }
+    #define REG_JNI(name) { name }
     struct RegJNIRec {
         int (*mProc)(JNIEnv*);
     };
 #else
-    #define REG_JNI(name)      { name, #name }
+    #define REG_JNI(name) { name, #name }
     struct RegJNIRec {
         int (*mProc)(JNIEnv*);
         const char* mName;
     };
 #endif
+
+#define REG_EJNI(demangled, name) { #name }
+struct RegEJNIRec {
+    const char* mName;
+};
 
 typedef void (*RegJAMProc)();
 
@@ -1148,107 +1153,224 @@ static void register_jam_procs(const RegJAMProc array[], size_t count)
 }
 
 static const RegJNIRec gRegJNI[] = {
-    REG_JNI(register_android_debug_JNITest),
-    REG_JNI(register_com_android_internal_os_RuntimeInit),
-    REG_JNI(register_android_os_SystemClock),
-    REG_JNI(register_android_util_EventLog),
-    REG_JNI(register_android_util_Log),
-    REG_JNI(register_android_util_FloatMath),
-    REG_JNI(register_android_text_format_Time),
-    REG_JNI(register_android_pim_EventRecurrence),
-    REG_JNI(register_android_content_AssetManager),
-    REG_JNI(register_android_content_StringBlock),
-    REG_JNI(register_android_content_XmlBlock),
-    REG_JNI(register_android_emoji_EmojiFactory),
-    REG_JNI(register_android_security_Md5MessageDigest),
-    REG_JNI(register_android_text_AndroidCharacter),
-    REG_JNI(register_android_text_KeyCharacterMap),
-    REG_JNI(register_android_os_Process),
-    REG_JNI(register_android_os_Binder),
-    REG_JNI(register_android_os_Hardware),
-    REG_JNI(register_android_view_Display),
-    REG_JNI(register_android_nio_utils),
-    REG_JNI(register_android_graphics_PixelFormat),
-    REG_JNI(register_android_graphics_Graphics),
-    REG_JNI(register_android_view_Surface),
-    REG_JNI(register_android_view_ViewRoot),
-    REG_JNI(register_com_google_android_gles_jni_EGLImpl),
-    REG_JNI(register_com_google_android_gles_jni_GLImpl),
-    REG_JNI(register_android_opengl_jni_GLES10),
-    REG_JNI(register_android_opengl_jni_GLES10Ext),
-    REG_JNI(register_android_opengl_jni_GLES11),
-    REG_JNI(register_android_opengl_jni_GLES11Ext),
-
-    REG_JNI(register_android_graphics_Bitmap),
-    REG_JNI(register_android_graphics_BitmapFactory),
-    REG_JNI(register_android_graphics_Camera),
-    REG_JNI(register_android_graphics_Canvas),
-    REG_JNI(register_android_graphics_ColorFilter),
-    REG_JNI(register_android_graphics_DrawFilter),
-    REG_JNI(register_android_graphics_Interpolator),
-    REG_JNI(register_android_graphics_LayerRasterizer),
-    REG_JNI(register_android_graphics_MaskFilter),
-    REG_JNI(register_android_graphics_Matrix),
-    REG_JNI(register_android_graphics_Movie),
-    REG_JNI(register_android_graphics_NinePatch),
-    REG_JNI(register_android_graphics_Paint),
-    REG_JNI(register_android_graphics_Path),
-    REG_JNI(register_android_graphics_PathMeasure),
-    REG_JNI(register_android_graphics_PathEffect),
-    REG_JNI(register_android_graphics_Picture),
-    REG_JNI(register_android_graphics_PorterDuff),
-    REG_JNI(register_android_graphics_Rasterizer),
-    REG_JNI(register_android_graphics_Region),
-    REG_JNI(register_android_graphics_Shader),
-    REG_JNI(register_android_graphics_Typeface),
-    REG_JNI(register_android_graphics_Xfermode),
-    REG_JNI(register_com_android_internal_graphics_NativeUtils),
-
     REG_JNI(register_android_database_CursorWindow),
     REG_JNI(register_android_database_SQLiteDatabase),
     REG_JNI(register_android_database_SQLiteDebug),
     REG_JNI(register_android_database_SQLiteProgram),
     REG_JNI(register_android_database_SQLiteQuery),
     REG_JNI(register_android_database_SQLiteStatement),
-    REG_JNI(register_android_os_Debug),
-    REG_JNI(register_android_os_FileObserver),
-    REG_JNI(register_android_os_FileUtils),
-    REG_JNI(register_android_os_ParcelFileDescriptor),
-    REG_JNI(register_android_os_Power),
-    REG_JNI(register_android_os_StatFs),
-    REG_JNI(register_android_os_SystemProperties),
-    REG_JNI(register_android_os_UEventObserver),
-    REG_JNI(register_android_net_LocalSocketImpl),
-    REG_JNI(register_android_net_NetworkUtils),
-    REG_JNI(register_android_net_wifi_WifiManager),
+    REG_JNI(register_android_os_Process),
     REG_JNI(register_android_os_MemoryFile),
-    REG_JNI(register_com_android_internal_os_ZygoteInit),
-    REG_JNI(register_android_hardware_Camera),
-    REG_JNI(register_android_hardware_SensorManager),
-    REG_JNI(register_android_media_AudioRecord),
-    REG_JNI(register_android_media_AudioSystem),
-    REG_JNI(register_android_media_AudioTrack),
-    REG_JNI(register_android_media_JetPlayer),
-    REG_JNI(register_android_media_ToneGenerator),
+    REG_JNI(register_android_net_NetworkUtils),
+    REG_JNI(register_android_graphics_Typeface),
+    REG_JNI(register_android_os_Binder),
+    REG_JNI(register_android_content_AssetManager),
+    REG_JNI(register_com_android_internal_os_ZygoteInit/*, _ZN7android43register_com_android_internal_os_ZygoteInitEP7_JNIEnv*/),
+    REG_JNI(register_com_android_internal_os_RuntimeInit/*, _ZN7android44register_com_android_internal_os_RuntimeInitEP7_JNIEnv*/),
+    REG_JNI(register_android_nio_utils/*, _ZN7android26register_android_nio_utilsEP7_JNIEnv*/),
 
-    REG_JNI(register_android_opengl_classes),
-    REG_JNI(register_android_bluetooth_HeadsetBase),
-    REG_JNI(register_android_bluetooth_BluetoothAudioGateway),
-    REG_JNI(register_android_bluetooth_BluetoothSocket),
-    REG_JNI(register_android_bluetooth_ScoSocket),
-    REG_JNI(register_android_server_BluetoothService),
-    REG_JNI(register_android_server_BluetoothEventLoop),
-    REG_JNI(register_android_server_BluetoothA2dpService),
-    REG_JNI(register_android_message_digest_sha1),
-    REG_JNI(register_android_ddm_DdmHandleNativeHeap),
-    REG_JNI(register_android_util_Base64),
-    REG_JNI(register_android_location_GpsLocationProvider),
-    REG_JNI(register_android_backup_BackupDataInput),
-    REG_JNI(register_android_backup_BackupDataOutput),
-    REG_JNI(register_android_backup_FileBackupHelperBase),
-    REG_JNI(register_android_backup_BackupHelperDispatcher),
+    //REG_JNI(register_android_graphics_Graphics),
+    //REG_JNI(register_android_graphics_Paint/*, _ZN7android31register_android_graphics_PaintEP7_JNIEnv*/),
+    //REG_JNI(register_android_graphics_BitmapFactory/*, _Z39register_android_graphics_BitmapFactoryP7_JNIEnv*/),
+    //REG_JNI(register_android_graphics_Bitmap/*, _Z32register_android_graphics_BitmapP7_JNIEnv*/),
+    //REG_JNI(register_android_graphics_Canvas/*, _ZN7android32register_android_graphics_CanvasEP7_JNIEnv*/), //uses Bitmap
+    //REG_JNI(register_android_graphics_NinePatch/*, _Z35register_android_graphics_NinePatchP7_JNIEnv*/),
 };
 
+//See extractRegisterFunc script under my-system/
+//If you move to above, delete below
+static const RegEJNIRec gRegExternalJNI[] = {
+    REG_EJNI(register_android_graphics_Graphics, _Z34register_android_graphics_GraphicsP7_JNIEnv),
+    REG_EJNI(register_android_graphics_Paint, _ZN7android31register_android_graphics_PaintEP7_JNIEnv),
+    REG_EJNI(register_android_graphics_BitmapFactory, _Z39register_android_graphics_BitmapFactoryP7_JNIEnv),
+    REG_EJNI(register_android_graphics_Bitmap, _Z32register_android_graphics_BitmapP7_JNIEnv),
+    REG_EJNI(register_android_graphics_Canvas, _ZN7android32register_android_graphics_CanvasEP7_JNIEnv), //uses Bitmap
+    REG_EJNI(register_android_graphics_NinePatch, _Z35register_android_graphics_NinePatchP7_JNIEnv),
+ 
+
+    REG_EJNI(register_android_view_Surface, _ZN7android29register_android_view_SurfaceEP7_JNIEnv),
+    REG_EJNI(register_android_graphics_Movie, _Z31register_android_graphics_MovieP7_JNIEnv),
+    REG_EJNI(register_android_util_FloatMath, _Z31register_android_util_FloatMathP7_JNIEnv),
+    REG_EJNI(register_android_graphics_Camera, _Z32register_android_graphics_CameraP7_JNIEnv),
+    REG_EJNI(register_android_graphics_Region, _Z32register_android_graphics_RegionP7_JNIEnv),
+    REG_EJNI(register_android_graphics_Shader, _Z32register_android_graphics_ShaderP7_JNIEnv),
+    REG_EJNI(register_android_hardware_Camera, _Z32register_android_hardware_CameraP7_JNIEnv),
+    REG_EJNI(register_android_media_JetPlayer, _Z32register_android_media_JetPlayerP7_JNIEnv),
+    REG_EJNI(register_android_media_AudioTrack, _Z33register_android_media_AudioTrackP7_JNIEnv),
+    REG_EJNI(register_android_media_AudioRecord, _Z34register_android_media_AudioRecordP7_JNIEnv),
+    REG_EJNI(register_android_media_AudioSystem, _Z34register_android_media_AudioSystemP7_JNIEnv),
+    REG_EJNI(register_android_opengl_jni_GLES10, _Z34register_android_opengl_jni_GLES10P7_JNIEnv),
+    REG_EJNI(register_android_opengl_jni_GLES11, _Z34register_android_opengl_jni_GLES11P7_JNIEnv),
+    REG_EJNI(register_android_graphics_MaskFilter, _Z36register_android_graphics_MaskFilterP7_JNIEnv),
+    REG_EJNI(register_android_graphics_PathEffect, _Z36register_android_graphics_PathEffectP7_JNIEnv),
+    REG_EJNI(register_android_hardware_fm_FMRxAPI, _Z36register_android_hardware_fm_FMRxAPIP7_JNIEnv),
+    REG_EJNI(register_android_media_ToneGenerator, _Z36register_android_media_ToneGeneratorP7_JNIEnv),
+    REG_EJNI(register_android_message_digest_sha1, _Z36register_android_message_digest_sha1P7_JNIEnv),
+    REG_EJNI(register_android_opengl_jni_GLES10Ext, _Z37register_android_opengl_jni_GLES10ExtP7_JNIEnv),
+    REG_EJNI(register_android_opengl_jni_GLES11Ext, _Z37register_android_opengl_jni_GLES11ExtP7_JNIEnv),
+    REG_EJNI(register_android_graphics_Interpolator, _Z38register_android_graphics_InterpolatorP7_JNIEnv),
+    REG_EJNI(register_android_hardware_SensorManager, _Z39register_android_hardware_SensorManagerP7_JNIEnv),
+    REG_EJNI(register_android_graphics_LayerRasterizer, _Z41register_android_graphics_LayerRasterizerP7_JNIEnv),
+    REG_EJNI(register_com_google_android_gles_jni_GLImpl, _Z43register_com_google_android_gles_jni_GLImplP7_JNIEnv),
+    REG_EJNI(register_com_google_android_gles_jni_EGLImpl, _Z44register_com_google_android_gles_jni_EGLImplP7_JNIEnv),
+    REG_EJNI(register_com_broadcom_bt_service_ftp_FTPService, _Z47register_com_broadcom_bt_service_ftp_FTPServiceP7_JNIEnv),
+    REG_EJNI(register_com_broadcom_bt_service_hid_HidService, _Z47register_com_broadcom_bt_service_hid_HidServiceP7_JNIEnv),
+    REG_EJNI(register_com_broadcom_bt_service_sap_SAPService, _Z47register_com_broadcom_bt_service_sap_SAPServiceP7_JNIEnv),
+    REG_EJNI(register_com_broadcom_bt_service_pbap_PBAPService, _Z49register_com_broadcom_bt_service_pbap_PBAPServiceP7_JNIEnv),
+    REG_EJNI(register_com_broadcom_bt_service_test_TestModeService, _Z53register_com_broadcom_bt_service_test_TestModeServiceP7_JNIEnv),
+    REG_EJNI(register_com_broadcom_bt_service_dun_BluetoothDUNService, _Z56register_com_broadcom_bt_service_dun_BluetoothDUNServiceP7_JNIEnv),
+    REG_EJNI(register_com_broadcom_bt_service_dg_BluetoothDataGatewayService, _Z63register_com_broadcom_bt_service_dg_BluetoothDataGatewayServiceP7_JNIEnv),
+    //REG_EJNI(register_com_lge_system, _ZN7android23register_com_lge_systemEP7_JNIEnv), //what does this do?
+    REG_EJNI(register_android_os_Exec, _ZN7android24register_android_os_ExecEP7_JNIEnv),
+    REG_EJNI(register_android_os_Debug, _ZN7android25register_android_os_DebugEP7_JNIEnv),
+    REG_EJNI(register_android_os_Power, _ZN7android25register_android_os_PowerEP7_JNIEnv),
+    REG_EJNI(register_android_util_Log, _ZN7android25register_android_util_LogEP7_JNIEnv),
+    //REG_EJNI(register_android_lge_lgdrm, _ZN7android26register_android_lge_lgdrmEP7_JNIEnv), //DRM..
+    REG_EJNI(register_android_os_StatFs, _ZN7android26register_android_os_StatFsEP7_JNIEnv),
+    REG_EJNI(register_android_os_Hardware, _ZN7android28register_android_os_HardwareEP7_JNIEnv),
+    REG_EJNI(register_android_util_Base64, _ZN7android28register_android_util_Base64EP7_JNIEnv),
+    REG_EJNI(register_android_os_FileUtils, _ZN7android29register_android_os_FileUtilsEP7_JNIEnv),
+    REG_EJNI(register_android_view_Display, _ZN7android29register_android_view_DisplayEP7_JNIEnv),
+    REG_EJNI(register_android_debug_JNITest, _ZN7android30register_android_debug_JNITestEP7_JNIEnv),
+    REG_EJNI(register_android_graphics_Path, _ZN7android30register_android_graphics_PathEP7_JNIEnv),
+    REG_EJNI(register_android_util_EventLog, _ZN7android30register_android_util_EventLogEP7_JNIEnv),
+    REG_EJNI(register_android_view_ViewRoot, _ZN7android30register_android_view_ViewRootEP7_JNIEnv),
+    REG_EJNI(register_android_opengl_classes, _ZN7android31register_android_opengl_classesEP7_JNIEnv),
+    REG_EJNI(register_android_os_SystemClock, _ZN7android31register_android_os_SystemClockEP7_JNIEnv),
+    REG_EJNI(register_android_graphics_Matrix, _ZN7android32register_android_graphics_MatrixEP7_JNIEnv),
+    REG_EJNI(register_android_os_FileObserver, _ZN7android32register_android_os_FileObserverEP7_JNIEnv),
+    REG_EJNI(register_android_content_XmlBlock, _ZN7android33register_android_content_XmlBlockEP7_JNIEnv),
+    REG_EJNI(register_android_graphics_Picture, _ZN7android33register_android_graphics_PictureEP7_JNIEnv),
+    REG_EJNI(register_android_text_format_Time, _ZN7android33register_android_text_format_TimeEP7_JNIEnv),
+    REG_EJNI(register_android_graphics_Xfermode, _ZN7android34register_android_graphics_XfermodeEP7_JNIEnv),
+    REG_EJNI(register_android_os_UEventObserver, _ZN7android34register_android_os_UEventObserverEP7_JNIEnv),
+    REG_EJNI(register_android_bluetooth_Database, _ZN7android35register_android_bluetooth_DatabaseEP7_JNIEnv),
+    REG_EJNI(register_android_emoji_EmojiFactory, _ZN7android35register_android_emoji_EmojiFactoryEP7_JNIEnv),
+    REG_EJNI(register_android_bluetooth_ScoSocket, _ZN7android36register_android_bluetooth_ScoSocketEP7_JNIEnv),
+    REG_EJNI(register_android_content_StringBlock, _ZN7android36register_android_content_StringBlockEP7_JNIEnv),
+    REG_EJNI(register_android_graphics_DrawFilter, _ZN7android36register_android_graphics_DrawFilterEP7_JNIEnv),
+    REG_EJNI(register_android_graphics_PorterDuff, _ZN7android36register_android_graphics_PorterDuffEP7_JNIEnv),
+    REG_EJNI(register_android_graphics_Rasterizer, _ZN7android36register_android_graphics_RasterizerEP7_JNIEnv),
+    REG_EJNI(register_android_net_LocalSocketImpl, _ZN7android36register_android_net_LocalSocketImplEP7_JNIEnv),
+    REG_EJNI(register_android_os_SystemProperties, _ZN7android36register_android_os_SystemPropertiesEP7_JNIEnv),
+    REG_EJNI(register_android_pim_EventRecurrence, _ZN7android36register_android_pim_EventRecurrenceEP7_JNIEnv),
+    REG_EJNI(register_android_graphics_ColorFilter, _ZN7android37register_android_graphics_ColorFilterEP7_JNIEnv),
+    REG_EJNI(register_android_graphics_PathMeasure, _ZN7android37register_android_graphics_PathMeasureEP7_JNIEnv),
+    REG_EJNI(register_android_graphics_PixelFormat, _ZN7android37register_android_graphics_PixelFormatEP7_JNIEnv),
+    REG_EJNI(register_android_net_wifi_WifiManager, _ZN7android37register_android_net_wifi_WifiManagerEP7_JNIEnv),
+    REG_EJNI(register_android_text_KeyCharacterMap, _ZN7android37register_android_text_KeyCharacterMapEP7_JNIEnv),
+    REG_EJNI(register_android_bluetooth_HeadsetBase, _ZN7android38register_android_bluetooth_HeadsetBaseEP7_JNIEnv),
+    REG_EJNI(register_android_text_AndroidCharacter, _ZN7android38register_android_text_AndroidCharacterEP7_JNIEnv),
+    REG_EJNI(register_android_backup_BackupDataInput, _ZN7android39register_android_backup_BackupDataInputEP7_JNIEnv),
+    REG_EJNI(register_android_bluetooth_RfcommSocket, _ZN7android39register_android_bluetooth_RfcommSocketEP7_JNIEnv),
+    REG_EJNI(register_android_backup_BackupDataOutput, _ZN7android40register_android_backup_BackupDataOutputEP7_JNIEnv),
+    REG_EJNI(register_android_ddm_DdmHandleNativeHeap, _ZN7android40register_android_ddm_DdmHandleNativeHeapEP7_JNIEnv),
+    REG_EJNI(register_android_os_ParcelFileDescriptor, _ZN7android40register_android_os_ParcelFileDescriptorEP7_JNIEnv),
+    REG_EJNI(register_android_security_Md5MessageDigest, _ZN7android42register_android_security_Md5MessageDigestEP7_JNIEnv),
+    REG_EJNI(register_android_server_BluetoothEventLoop, _ZN7android42register_android_server_BluetoothEventLoopEP7_JNIEnv),
+    REG_EJNI(register_android_backup_FileBackupHelperBase, _ZN7android44register_android_backup_FileBackupHelperBaseEP7_JNIEnv),
+    //REG_EJNI(register_android_server_BluetoothA2dpService, _ZN7android44register_android_server_BluetoothA2dpServiceEP7_JNIEnv), //try stock one
+    REG_EJNI(register_android_location_GpsLocationProvider, _ZN7android45register_android_location_GpsLocationProviderEP7_JNIEnv),
+    REG_EJNI(register_android_backup_BackupHelperDispatcher, _ZN7android46register_android_backup_BackupHelperDispatcherEP7_JNIEnv),
+    REG_EJNI(register_android_server_BluetoothDeviceService, _ZN7android46register_android_server_BluetoothDeviceServiceEP7_JNIEnv),
+    REG_EJNI(register_com_broadcom_bt_service_opp_OppService, _ZN7android47register_com_broadcom_bt_service_opp_OppServiceEP7_JNIEnv),
+    REG_EJNI(register_android_bluetooth_BluetoothAudioGateway, _ZN7android48register_android_bluetooth_BluetoothAudioGatewayEP7_JNIEnv),
+    REG_EJNI(register_com_android_internal_graphics_NativeUtils, _ZN7android50register_com_android_internal_graphics_NativeUtilsEP7_JNIEnv),
+    //REG_EJNI(register_com_broadcom_bt_service_opp_OppEventHandler, _ZN7android52register_com_broadcom_bt_service_opp_OppEventHandlerEP7_JNIEnv),
+    REG_EJNI(register_com_broadcom_bt_service_fm_FmReceiverService, _ZN7android53register_com_broadcom_bt_service_fm_FmReceiverServiceEP7_JNIEnv),
+    REG_EJNI(register_com_broadcom_bt_service_fm_FmReceiverEventLoop, _ZN7android55register_com_broadcom_bt_service_fm_FmReceiverEventLoopEP7_JNIEnv),
+    //REG_EJNI(register_android_net_wifiHiddenMenu_WifiHiddenMenuNative, _ZN7android56register_android_net_wifiHiddenMenu_WifiHiddenMenuNativeEP7_JNIEnv),
+    //REG_EJNI(register_com_broadcom_bt_service_bpp_BluetoothPrinterService, _ZN7android60register_com_broadcom_bt_service_bpp_BluetoothPrinterServiceEP7_JNIEnv),
+    //REG_EJNI(register_com_broadcom_bt_service_bpp_BluetoothPrinterEventLoop, _ZN7android62register_com_broadcom_bt_service_bpp_BluetoothPrinterEventLoopEP7_JNIEnv)
+    /* 
+    REG_EJNI(register_android_os_SystemClock),
+    REG_EJNI(register_android_util_EventLog),
+    REG_EJNI(register_android_util_Log),
+    REG_EJNI(register_android_util_FloatMath),
+    REG_EJNI(register_android_text_format_Time),
+    REG_EJNI(register_android_pim_EventRecurrence),
+    REG_EJNI(register_android_content_StringBlock),
+    REG_EJNI(register_android_content_XmlBlock),
+    REG_EJNI(register_android_emoji_EmojiFactory),
+    REG_EJNI(register_android_security_Md5MessageDigest),
+    REG_EJNI(register_android_text_AndroidCharacter),
+    REG_EJNI(register_android_text_KeyCharacterMap),
+    REG_EJNI(register_android_os_Hardware),
+    REG_EJNI(register_android_view_Display),
+    REG_EJNI(register_android_nio_utils),
+    REG_EJNI(register_android_graphics_PixelFormat),
+    REG_EJNI(register_android_view_Surface),
+    REG_EJNI(register_android_view_ViewRoot),
+    REG_EJNI(register_com_google_android_gles_jni_EGLImpl),
+    REG_EJNI(register_com_google_android_gles_jni_GLImpl),
+    REG_EJNI(register_android_opengl_jni_GLES10),
+    REG_EJNI(register_android_opengl_jni_GLES10Ext),
+    REG_EJNI(register_android_opengl_jni_GLES11),
+    REG_EJNI(register_android_opengl_jni_GLES11Ext),
+
+    REG_EJNI(register_android_graphics_Bitmap),
+    REG_EJNI(register_android_graphics_BitmapFactory),
+    REG_EJNI(register_android_graphics_Camera),
+    REG_EJNI(register_android_graphics_Canvas),
+    REG_EJNI(register_android_graphics_ColorFilter),
+    REG_EJNI(register_android_graphics_DrawFilter),
+    REG_EJNI(register_android_graphics_Interpolator),
+    REG_EJNI(register_android_graphics_LayerRasterizer),
+    REG_EJNI(register_android_graphics_MaskFilter),
+    REG_EJNI(register_android_graphics_Matrix),
+    REG_EJNI(register_android_graphics_Movie),
+    REG_EJNI(register_android_graphics_NinePatch),
+    REG_EJNI(register_android_graphics_Paint),
+    REG_EJNI(register_android_graphics_Path),
+    REG_EJNI(register_android_graphics_PathMeasure),
+    REG_EJNI(register_android_graphics_PathEffect),
+    REG_EJNI(register_android_graphics_Picture),
+    REG_EJNI(register_android_graphics_PorterDuff),
+    REG_EJNI(register_android_graphics_Rasterizer),
+    REG_EJNI(register_android_graphics_Region),
+    REG_EJNI(register_android_graphics_Shader),
+    REG_EJNI(register_android_graphics_Xfermode),
+    REG_EJNI(register_com_android_internal_graphics_NativeUtils),
+
+    REG_EJNI(register_android_os_Debug),
+    REG_EJNI(register_android_os_FileObserver),
+    REG_EJNI(register_android_os_FileUtils),
+    REG_EJNI(register_android_os_ParcelFileDescriptor),
+    REG_EJNI(register_android_os_Power),
+    REG_EJNI(register_android_os_StatFs),
+    REG_EJNI(register_android_os_SystemProperties),
+    REG_EJNI(register_android_os_UEventObserver),
+    REG_EJNI(register_android_net_LocalSocketImpl),
+    REG_EJNI(register_android_net_wifi_WifiManager), //This includes much of LG's stuff
+    REG_EJNI(register_com_android_internal_os_ZygoteInit),
+    REG_EJNI(register_android_hardware_Camera),
+    REG_EJNI(register_android_hardware_SensorManager),
+    REG_EJNI(register_android_media_AudioRecord),
+    REG_EJNI(register_android_media_AudioSystem),
+    REG_EJNI(register_android_media_AudioTrack),
+    REG_EJNI(register_android_media_JetPlayer),
+    REG_EJNI(register_android_media_ToneGenerator),
+
+    REG_EJNI(register_android_opengl_classes),
+    REG_EJNI(register_android_bluetooth_HeadsetBase),
+    REG_EJNI(register_android_bluetooth_BluetoothAudioGateway),
+    REG_EJNI(register_android_bluetooth_BluetoothSocket),
+    REG_EJNI(register_android_bluetooth_ScoSocket),
+    REG_EJNI(register_android_server_BluetoothService),
+    REG_EJNI(register_android_server_BluetoothEventLoop),
+    REG_EJNI(register_android_server_BluetoothA2dpService),
+    REG_EJNI(register_android_message_digest_sha1),
+    REG_EJNI(register_android_ddm_DdmHandleNativeHeap),
+    REG_EJNI(register_android_util_Base64),
+    REG_EJNI(register_android_location_GpsLocationProvider),
+    REG_EJNI(register_android_backup_BackupDataInput),
+    REG_EJNI(register_android_backup_BackupDataOutput),
+    REG_EJNI(register_android_backup_FileBackupHelperBase),
+    REG_EJNI(register_android_backup_BackupHelperDispatcher),
+    */
+};
+
+typedef int (*JniRegFunc)(JNIEnv*);
 /*
  * Register android native functions with the VM.
  */
@@ -1274,6 +1396,26 @@ static const RegJNIRec gRegJNI[] = {
     if (register_jni_procs(gRegJNI, NELEM(gRegJNI), env) < 0) {
         env->PopLocalFrame(NULL);
         return -1;
+    }
+    void* dl = dlopen("libandroid_runtime_donut.so", RTLD_NOW | RTLD_LOCAL);
+    if( !dl ) {
+        LOGE("Error dlopen for libandroid_runtime_donut.so: %s\n", dlerror());
+        env->PopLocalFrame(NULL);
+        return -1;
+    }
+    for (size_t i = 0; i < NELEM(gRegExternalJNI); i++) {
+        JniRegFunc func = (JniRegFunc) dlsym(dl,gRegExternalJNI[i].mName);
+        if(!func) {
+            LOGE("dlsym(): failed to find symbol %s\n", gRegExternalJNI[i].mName);
+            env->PopLocalFrame(NULL);
+            return -1;
+        }
+        LOGE("func %s is %x\n",gRegExternalJNI[i].mName, func);
+        if(func(env) < 0) {
+            LOGE("----------!!! %s failed to register\n", gRegExternalJNI[i].mName);
+            env->PopLocalFrame(NULL);
+            return -1;
+        }
     }
     env->PopLocalFrame(NULL);
 
