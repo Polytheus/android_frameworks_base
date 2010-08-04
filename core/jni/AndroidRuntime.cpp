@@ -1162,57 +1162,112 @@ static const RegJNIRec gRegJNI[] = {
     REG_JNI(register_android_os_Process),
     REG_JNI(register_android_os_MemoryFile),
     REG_JNI(register_android_net_NetworkUtils),
-    REG_JNI(register_android_graphics_Typeface),
     REG_JNI(register_android_os_Binder),
     REG_JNI(register_android_content_AssetManager),
     REG_JNI(register_com_android_internal_os_ZygoteInit/*, _ZN7android43register_com_android_internal_os_ZygoteInitEP7_JNIEnv*/),
     REG_JNI(register_com_android_internal_os_RuntimeInit/*, _ZN7android44register_com_android_internal_os_RuntimeInitEP7_JNIEnv*/),
     REG_JNI(register_android_nio_utils/*, _ZN7android26register_android_nio_utilsEP7_JNIEnv*/),
 
-    //REG_JNI(register_android_graphics_Graphics),
-    //REG_JNI(register_android_graphics_Paint/*, _ZN7android31register_android_graphics_PaintEP7_JNIEnv*/),
-    //REG_JNI(register_android_graphics_BitmapFactory/*, _Z39register_android_graphics_BitmapFactoryP7_JNIEnv*/),
-    //REG_JNI(register_android_graphics_Bitmap/*, _Z32register_android_graphics_BitmapP7_JNIEnv*/),
-    //REG_JNI(register_android_graphics_Canvas/*, _ZN7android32register_android_graphics_CanvasEP7_JNIEnv*/), //uses Bitmap
-    //REG_JNI(register_android_graphics_NinePatch/*, _Z35register_android_graphics_NinePatchP7_JNIEnv*/),
+#if 0
+    REG_JNI(register_android_graphics_Typeface),
+    REG_JNI(register_android_graphics_Graphics),
+    REG_JNI(register_android_graphics_Paint/*, _ZN7android31register_android_graphics_PaintEP7_JNIEnv*/),
+    REG_JNI(register_android_graphics_BitmapFactory/*, _Z39register_android_graphics_BitmapFactoryP7_JNIEnv*/),
+    REG_JNI(register_android_graphics_Bitmap/*, _Z32register_android_graphics_BitmapP7_JNIEnv*/),
+    REG_JNI(register_android_graphics_Canvas/*, _ZN7android32register_android_graphics_CanvasEP7_JNIEnv*/), //uses Bitmap
+    REG_JNI(register_android_graphics_NinePatch/*, _Z35register_android_graphics_NinePatchP7_JNIEnv*/),
+    REG_JNI(register_android_graphics_Movie/*, _Z31register_android_graphics_MovieP7_JNIEnv*/),
+    REG_JNI(register_android_graphics_Camera/*, _Z32register_android_graphics_CameraP7_JNIEnv*/),
+    REG_JNI(register_android_graphics_Region/*, _Z32register_android_graphics_RegionP7_JNIEnv*/),
+    REG_JNI(register_android_graphics_Shader/*, _Z32register_android_graphics_ShaderP7_JNIEnv*/),
+    REG_JNI(register_android_graphics_MaskFilter/*, _Z36register_android_graphics_MaskFilterP7_JNIEnv*/),
+    REG_JNI(register_android_graphics_PathEffect/*, _Z36register_android_graphics_PathEffectP7_JNIEnv*/),
+    REG_JNI(register_android_graphics_Interpolator/*, _Z38register_android_graphics_InterpolatorP7_JNIEnv*/),
+    REG_JNI(register_android_graphics_LayerRasterizer/*, _Z41register_android_graphics_LayerRasterizerP7_JNIEnv*/),
+    REG_JNI(register_android_graphics_Path/*, _ZN7android30register_android_graphics_PathEP7_JNIEnv*/),
+    REG_JNI(register_android_graphics_Matrix/*, _ZN7android32register_android_graphics_MatrixEP7_JNIEnv*/),
+    REG_JNI(register_android_graphics_ColorFilter/*, _ZN7android37register_android_graphics_ColorFilterEP7_JNIEnv*/),
+    REG_JNI(register_android_graphics_PathMeasure/*, _ZN7android37register_android_graphics_PathMeasureEP7_JNIEnv*/),
+    REG_JNI(register_android_graphics_PixelFormat/*, _ZN7android37register_android_graphics_PixelFormatEP7_JNIEnv*/),
+    REG_JNI(register_com_android_internal_graphics_NativeUtils/*, _ZN7android50register_com_android_internal_graphics_NativeUtilsEP7_JNIEnv*/),
+    REG_JNI(register_android_graphics_DrawFilter/*, _ZN7android36register_android_graphics_DrawFilterEP7_JNIEnv*/),
+    REG_JNI(register_android_graphics_PorterDuff/*, _ZN7android36register_android_graphics_PorterDuffEP7_JNIEnv*/),
+    REG_JNI(register_android_graphics_Rasterizer/*, _ZN7android36register_android_graphics_RasterizerEP7_JNIEnv*/),
+    REG_JNI(register_android_graphics_Picture/*, _ZN7android33register_android_graphics_PictureEP7_JNIEnv*/),
+    REG_JNI(register_android_graphics_Xfermode/*, _ZN7android34register_android_graphics_XfermodeEP7_JNIEnv*/),
+    REG_JNI(register_android_view_Surface/*, _ZN7android29register_android_view_SurfaceEP7_JNIEnv*/),
+    REG_JNI(register_com_google_android_gles_jni_GLImpl/*, _Z43register_com_google_android_gles_jni_GLImplP7_JNIEnv*/),
+    REG_JNI(register_com_google_android_gles_jni_EGLImpl/*, _Z44register_com_google_android_gles_jni_EGLImplP7_JNIEnv*/),
+    
+    REG_JNI(register_android_hardware_Camera/*, _Z32register_android_hardware_CameraP7_JNIEnv*/),
+    REG_JNI(register_android_media_JetPlayer/*, _Z32register_android_media_JetPlayerP7_JNIEnv*/),
+    REG_JNI(register_android_media_AudioTrack/*, _Z33register_android_media_AudioTrackP7_JNIEnv*/),
+    REG_JNI(register_android_media_AudioRecord/*, _Z34register_android_media_AudioRecordP7_JNIEnv*/),
+    REG_JNI(register_android_media_AudioSystem/*, _Z34register_android_media_AudioSystemP7_JNIEnv*/),
+    REG_JNI(register_android_media_ToneGenerator/*, _Z36register_android_media_ToneGeneratorP7_JNIEnv*/),
+    REG_JNI(register_android_opengl_jni_GLES10/*, _Z34register_android_opengl_jni_GLES10P7_JNIEnv*/),
+    REG_JNI(register_android_opengl_jni_GLES11/*, _Z34register_android_opengl_jni_GLES11P7_JNIEnv*/),
+    REG_JNI(register_android_opengl_jni_GLES10Ext/*, _Z37register_android_opengl_jni_GLES10ExtP7_JNIEnv*/),
+    REG_JNI(register_android_opengl_jni_GLES11Ext/*, _Z37register_android_opengl_jni_GLES11ExtP7_JNIEnv*/),
+    REG_JNI(register_android_view_Display/*, _ZN7android29register_android_view_DisplayEP7_JNIEnv*/),
+    REG_JNI(register_android_view_ViewRoot/*, _ZN7android30register_android_view_ViewRootEP7_JNIEnv*/),
+    REG_JNI(register_android_opengl_classes/*, _ZN7android31register_android_opengl_classesEP7_JNIEnv*/),
+#endif
 };
 
 //See extractRegisterFunc script under my-system/
 //If you move to above, delete below
 static const RegEJNIRec gRegExternalJNI[] = {
+#if 1    /* graphics */
+    REG_EJNI(register_android_graphics_Typeface, _Z34register_android_graphics_TypefaceP7_JNIEnv),    
     REG_EJNI(register_android_graphics_Graphics, _Z34register_android_graphics_GraphicsP7_JNIEnv),
     REG_EJNI(register_android_graphics_Paint, _ZN7android31register_android_graphics_PaintEP7_JNIEnv),
     REG_EJNI(register_android_graphics_BitmapFactory, _Z39register_android_graphics_BitmapFactoryP7_JNIEnv),
     REG_EJNI(register_android_graphics_Bitmap, _Z32register_android_graphics_BitmapP7_JNIEnv),
     REG_EJNI(register_android_graphics_Canvas, _ZN7android32register_android_graphics_CanvasEP7_JNIEnv), //uses Bitmap
     REG_EJNI(register_android_graphics_NinePatch, _Z35register_android_graphics_NinePatchP7_JNIEnv),
- 
-
-    REG_EJNI(register_android_view_Surface, _ZN7android29register_android_view_SurfaceEP7_JNIEnv),
     REG_EJNI(register_android_graphics_Movie, _Z31register_android_graphics_MovieP7_JNIEnv),
-    REG_EJNI(register_android_util_FloatMath, _Z31register_android_util_FloatMathP7_JNIEnv),
     REG_EJNI(register_android_graphics_Camera, _Z32register_android_graphics_CameraP7_JNIEnv),
     REG_EJNI(register_android_graphics_Region, _Z32register_android_graphics_RegionP7_JNIEnv),
     REG_EJNI(register_android_graphics_Shader, _Z32register_android_graphics_ShaderP7_JNIEnv),
+    REG_EJNI(register_android_graphics_MaskFilter, _Z36register_android_graphics_MaskFilterP7_JNIEnv),
+    REG_EJNI(register_android_graphics_PathEffect, _Z36register_android_graphics_PathEffectP7_JNIEnv),
+    REG_EJNI(register_android_graphics_Interpolator, _Z38register_android_graphics_InterpolatorP7_JNIEnv),
+    REG_EJNI(register_android_graphics_LayerRasterizer, _Z41register_android_graphics_LayerRasterizerP7_JNIEnv),
+    REG_EJNI(register_android_graphics_Matrix, _ZN7android32register_android_graphics_MatrixEP7_JNIEnv),
+    REG_EJNI(register_android_graphics_Path, _ZN7android30register_android_graphics_PathEP7_JNIEnv),
+    REG_EJNI(register_android_graphics_ColorFilter, _ZN7android37register_android_graphics_ColorFilterEP7_JNIEnv),
+    REG_EJNI(register_android_graphics_PathMeasure, _ZN7android37register_android_graphics_PathMeasureEP7_JNIEnv),
+    REG_EJNI(register_android_graphics_PixelFormat, _ZN7android37register_android_graphics_PixelFormatEP7_JNIEnv),
+    REG_EJNI(register_com_android_internal_graphics_NativeUtils, _ZN7android50register_com_android_internal_graphics_NativeUtilsEP7_JNIEnv),
+    REG_EJNI(register_android_graphics_DrawFilter, _ZN7android36register_android_graphics_DrawFilterEP7_JNIEnv),
+    REG_EJNI(register_android_graphics_PorterDuff, _ZN7android36register_android_graphics_PorterDuffEP7_JNIEnv),
+    REG_EJNI(register_android_graphics_Rasterizer, _ZN7android36register_android_graphics_RasterizerEP7_JNIEnv),
+    REG_EJNI(register_android_graphics_Picture, _ZN7android33register_android_graphics_PictureEP7_JNIEnv),
+    REG_EJNI(register_android_graphics_Xfermode, _ZN7android34register_android_graphics_XfermodeEP7_JNIEnv),
+    REG_EJNI(register_android_view_Surface, _ZN7android29register_android_view_SurfaceEP7_JNIEnv),
+    REG_EJNI(register_com_google_android_gles_jni_GLImpl, _Z43register_com_google_android_gles_jni_GLImplP7_JNIEnv),
+    REG_EJNI(register_com_google_android_gles_jni_EGLImpl, _Z44register_com_google_android_gles_jni_EGLImplP7_JNIEnv),
+    
     REG_EJNI(register_android_hardware_Camera, _Z32register_android_hardware_CameraP7_JNIEnv),
     REG_EJNI(register_android_media_JetPlayer, _Z32register_android_media_JetPlayerP7_JNIEnv),
     REG_EJNI(register_android_media_AudioTrack, _Z33register_android_media_AudioTrackP7_JNIEnv),
     REG_EJNI(register_android_media_AudioRecord, _Z34register_android_media_AudioRecordP7_JNIEnv),
     REG_EJNI(register_android_media_AudioSystem, _Z34register_android_media_AudioSystemP7_JNIEnv),
+    REG_EJNI(register_android_media_ToneGenerator, _Z36register_android_media_ToneGeneratorP7_JNIEnv),
     REG_EJNI(register_android_opengl_jni_GLES10, _Z34register_android_opengl_jni_GLES10P7_JNIEnv),
     REG_EJNI(register_android_opengl_jni_GLES11, _Z34register_android_opengl_jni_GLES11P7_JNIEnv),
-    REG_EJNI(register_android_graphics_MaskFilter, _Z36register_android_graphics_MaskFilterP7_JNIEnv),
-    REG_EJNI(register_android_graphics_PathEffect, _Z36register_android_graphics_PathEffectP7_JNIEnv),
-    REG_EJNI(register_android_hardware_fm_FMRxAPI, _Z36register_android_hardware_fm_FMRxAPIP7_JNIEnv),
-    REG_EJNI(register_android_media_ToneGenerator, _Z36register_android_media_ToneGeneratorP7_JNIEnv),
-    REG_EJNI(register_android_message_digest_sha1, _Z36register_android_message_digest_sha1P7_JNIEnv),
     REG_EJNI(register_android_opengl_jni_GLES10Ext, _Z37register_android_opengl_jni_GLES10ExtP7_JNIEnv),
     REG_EJNI(register_android_opengl_jni_GLES11Ext, _Z37register_android_opengl_jni_GLES11ExtP7_JNIEnv),
-    REG_EJNI(register_android_graphics_Interpolator, _Z38register_android_graphics_InterpolatorP7_JNIEnv),
+    REG_EJNI(register_android_view_Display, _ZN7android29register_android_view_DisplayEP7_JNIEnv),
+    REG_EJNI(register_android_view_ViewRoot, _ZN7android30register_android_view_ViewRootEP7_JNIEnv),
+    REG_EJNI(register_android_opengl_classes, _ZN7android31register_android_opengl_classesEP7_JNIEnv),
+#endif
+
+    REG_EJNI(register_android_util_FloatMath, _Z31register_android_util_FloatMathP7_JNIEnv),
+    REG_EJNI(register_android_hardware_fm_FMRxAPI, _Z36register_android_hardware_fm_FMRxAPIP7_JNIEnv),
+    REG_EJNI(register_android_message_digest_sha1, _Z36register_android_message_digest_sha1P7_JNIEnv),
     REG_EJNI(register_android_hardware_SensorManager, _Z39register_android_hardware_SensorManagerP7_JNIEnv),
-    REG_EJNI(register_android_graphics_LayerRasterizer, _Z41register_android_graphics_LayerRasterizerP7_JNIEnv),
-    REG_EJNI(register_com_google_android_gles_jni_GLImpl, _Z43register_com_google_android_gles_jni_GLImplP7_JNIEnv),
-    REG_EJNI(register_com_google_android_gles_jni_EGLImpl, _Z44register_com_google_android_gles_jni_EGLImplP7_JNIEnv),
     REG_EJNI(register_com_broadcom_bt_service_ftp_FTPService, _Z47register_com_broadcom_bt_service_ftp_FTPServiceP7_JNIEnv),
     REG_EJNI(register_com_broadcom_bt_service_hid_HidService, _Z47register_com_broadcom_bt_service_hid_HidServiceP7_JNIEnv),
     REG_EJNI(register_com_broadcom_bt_service_sap_SAPService, _Z47register_com_broadcom_bt_service_sap_SAPServiceP7_JNIEnv),
@@ -1230,33 +1285,20 @@ static const RegEJNIRec gRegExternalJNI[] = {
     REG_EJNI(register_android_os_Hardware, _ZN7android28register_android_os_HardwareEP7_JNIEnv),
     REG_EJNI(register_android_util_Base64, _ZN7android28register_android_util_Base64EP7_JNIEnv),
     REG_EJNI(register_android_os_FileUtils, _ZN7android29register_android_os_FileUtilsEP7_JNIEnv),
-    REG_EJNI(register_android_view_Display, _ZN7android29register_android_view_DisplayEP7_JNIEnv),
     REG_EJNI(register_android_debug_JNITest, _ZN7android30register_android_debug_JNITestEP7_JNIEnv),
-    REG_EJNI(register_android_graphics_Path, _ZN7android30register_android_graphics_PathEP7_JNIEnv),
     REG_EJNI(register_android_util_EventLog, _ZN7android30register_android_util_EventLogEP7_JNIEnv),
-    REG_EJNI(register_android_view_ViewRoot, _ZN7android30register_android_view_ViewRootEP7_JNIEnv),
-    REG_EJNI(register_android_opengl_classes, _ZN7android31register_android_opengl_classesEP7_JNIEnv),
     REG_EJNI(register_android_os_SystemClock, _ZN7android31register_android_os_SystemClockEP7_JNIEnv),
-    REG_EJNI(register_android_graphics_Matrix, _ZN7android32register_android_graphics_MatrixEP7_JNIEnv),
     REG_EJNI(register_android_os_FileObserver, _ZN7android32register_android_os_FileObserverEP7_JNIEnv),
     REG_EJNI(register_android_content_XmlBlock, _ZN7android33register_android_content_XmlBlockEP7_JNIEnv),
-    REG_EJNI(register_android_graphics_Picture, _ZN7android33register_android_graphics_PictureEP7_JNIEnv),
     REG_EJNI(register_android_text_format_Time, _ZN7android33register_android_text_format_TimeEP7_JNIEnv),
-    REG_EJNI(register_android_graphics_Xfermode, _ZN7android34register_android_graphics_XfermodeEP7_JNIEnv),
     REG_EJNI(register_android_os_UEventObserver, _ZN7android34register_android_os_UEventObserverEP7_JNIEnv),
     REG_EJNI(register_android_bluetooth_Database, _ZN7android35register_android_bluetooth_DatabaseEP7_JNIEnv),
     REG_EJNI(register_android_emoji_EmojiFactory, _ZN7android35register_android_emoji_EmojiFactoryEP7_JNIEnv),
     REG_EJNI(register_android_bluetooth_ScoSocket, _ZN7android36register_android_bluetooth_ScoSocketEP7_JNIEnv),
     REG_EJNI(register_android_content_StringBlock, _ZN7android36register_android_content_StringBlockEP7_JNIEnv),
-    REG_EJNI(register_android_graphics_DrawFilter, _ZN7android36register_android_graphics_DrawFilterEP7_JNIEnv),
-    REG_EJNI(register_android_graphics_PorterDuff, _ZN7android36register_android_graphics_PorterDuffEP7_JNIEnv),
-    REG_EJNI(register_android_graphics_Rasterizer, _ZN7android36register_android_graphics_RasterizerEP7_JNIEnv),
     REG_EJNI(register_android_net_LocalSocketImpl, _ZN7android36register_android_net_LocalSocketImplEP7_JNIEnv),
     REG_EJNI(register_android_os_SystemProperties, _ZN7android36register_android_os_SystemPropertiesEP7_JNIEnv),
     REG_EJNI(register_android_pim_EventRecurrence, _ZN7android36register_android_pim_EventRecurrenceEP7_JNIEnv),
-    REG_EJNI(register_android_graphics_ColorFilter, _ZN7android37register_android_graphics_ColorFilterEP7_JNIEnv),
-    REG_EJNI(register_android_graphics_PathMeasure, _ZN7android37register_android_graphics_PathMeasureEP7_JNIEnv),
-    REG_EJNI(register_android_graphics_PixelFormat, _ZN7android37register_android_graphics_PixelFormatEP7_JNIEnv),
     REG_EJNI(register_android_net_wifi_WifiManager, _ZN7android37register_android_net_wifi_WifiManagerEP7_JNIEnv),
     REG_EJNI(register_android_text_KeyCharacterMap, _ZN7android37register_android_text_KeyCharacterMapEP7_JNIEnv),
     REG_EJNI(register_android_bluetooth_HeadsetBase, _ZN7android38register_android_bluetooth_HeadsetBaseEP7_JNIEnv),
@@ -1275,7 +1317,6 @@ static const RegEJNIRec gRegExternalJNI[] = {
     REG_EJNI(register_android_server_BluetoothDeviceService, _ZN7android46register_android_server_BluetoothDeviceServiceEP7_JNIEnv),
     REG_EJNI(register_com_broadcom_bt_service_opp_OppService, _ZN7android47register_com_broadcom_bt_service_opp_OppServiceEP7_JNIEnv),
     REG_EJNI(register_android_bluetooth_BluetoothAudioGateway, _ZN7android48register_android_bluetooth_BluetoothAudioGatewayEP7_JNIEnv),
-    REG_EJNI(register_com_android_internal_graphics_NativeUtils, _ZN7android50register_com_android_internal_graphics_NativeUtilsEP7_JNIEnv),
     //REG_EJNI(register_com_broadcom_bt_service_opp_OppEventHandler, _ZN7android52register_com_broadcom_bt_service_opp_OppEventHandlerEP7_JNIEnv),
     REG_EJNI(register_com_broadcom_bt_service_fm_FmReceiverService, _ZN7android53register_com_broadcom_bt_service_fm_FmReceiverServiceEP7_JNIEnv),
     REG_EJNI(register_com_broadcom_bt_service_fm_FmReceiverEventLoop, _ZN7android55register_com_broadcom_bt_service_fm_FmReceiverEventLoopEP7_JNIEnv),
@@ -1296,17 +1337,7 @@ static const RegEJNIRec gRegExternalJNI[] = {
     REG_EJNI(register_android_text_AndroidCharacter),
     REG_EJNI(register_android_text_KeyCharacterMap),
     REG_EJNI(register_android_os_Hardware),
-    REG_EJNI(register_android_view_Display),
     REG_EJNI(register_android_nio_utils),
-    REG_EJNI(register_android_graphics_PixelFormat),
-    REG_EJNI(register_android_view_Surface),
-    REG_EJNI(register_android_view_ViewRoot),
-    REG_EJNI(register_com_google_android_gles_jni_EGLImpl),
-    REG_EJNI(register_com_google_android_gles_jni_GLImpl),
-    REG_EJNI(register_android_opengl_jni_GLES10),
-    REG_EJNI(register_android_opengl_jni_GLES10Ext),
-    REG_EJNI(register_android_opengl_jni_GLES11),
-    REG_EJNI(register_android_opengl_jni_GLES11Ext),
 
     REG_EJNI(register_android_graphics_Bitmap),
     REG_EJNI(register_android_graphics_BitmapFactory),
@@ -1322,7 +1353,6 @@ static const RegEJNIRec gRegExternalJNI[] = {
     REG_EJNI(register_android_graphics_NinePatch),
     REG_EJNI(register_android_graphics_Paint),
     REG_EJNI(register_android_graphics_Path),
-    REG_EJNI(register_android_graphics_PathMeasure),
     REG_EJNI(register_android_graphics_PathEffect),
     REG_EJNI(register_android_graphics_Picture),
     REG_EJNI(register_android_graphics_PorterDuff),
@@ -1330,7 +1360,6 @@ static const RegEJNIRec gRegExternalJNI[] = {
     REG_EJNI(register_android_graphics_Region),
     REG_EJNI(register_android_graphics_Shader),
     REG_EJNI(register_android_graphics_Xfermode),
-    REG_EJNI(register_com_android_internal_graphics_NativeUtils),
 
     REG_EJNI(register_android_os_Debug),
     REG_EJNI(register_android_os_FileObserver),
@@ -1342,16 +1371,8 @@ static const RegEJNIRec gRegExternalJNI[] = {
     REG_EJNI(register_android_os_UEventObserver),
     REG_EJNI(register_android_net_LocalSocketImpl),
     REG_EJNI(register_android_net_wifi_WifiManager), //This includes much of LG's stuff
-    REG_EJNI(register_com_android_internal_os_ZygoteInit),
-    REG_EJNI(register_android_hardware_Camera),
     REG_EJNI(register_android_hardware_SensorManager),
-    REG_EJNI(register_android_media_AudioRecord),
-    REG_EJNI(register_android_media_AudioSystem),
-    REG_EJNI(register_android_media_AudioTrack),
-    REG_EJNI(register_android_media_JetPlayer),
-    REG_EJNI(register_android_media_ToneGenerator),
 
-    REG_EJNI(register_android_opengl_classes),
     REG_EJNI(register_android_bluetooth_HeadsetBase),
     REG_EJNI(register_android_bluetooth_BluetoothAudioGateway),
     REG_EJNI(register_android_bluetooth_BluetoothSocket),
@@ -1369,6 +1390,70 @@ static const RegEJNIRec gRegExternalJNI[] = {
     REG_EJNI(register_android_backup_BackupHelperDispatcher),
     */
 };
+
+// Functions linked to by libandroid_runtime_donut.so, but not used
+#define STUB(x)  int x() { LOGE("ERROR: Called libandroid_runtime stub %s - aborting\n", #x); exit(1); }
+#define STUBB { LOGE
+extern "C" {
+    #if 0
+    /* old libui functions */
+    STUB(_ZN7android7Surface8unfreezeEv)
+    STUB(_ZN7android7Surface9setMatrixEffff)
+    STUB(_ZN7android7Surface6unlockEv)
+    STUB(_ZN7android7Surface4hideEv)
+    STUB(_ZN7android7Surface14readFromParcelEPNS_6ParcelE)
+    STUB(_ZN7android7Surface7setSizeEjj)
+    STUB(_ZN7android7Surface8setLayerEi)
+    STUB(_ZN7android7Surface8setAlphaEf)
+    STUB(_ZN7android7Surface8setFlagsEjj)
+    STUB(_ZN7android7Surface11setPositionEii)
+    STUB(_ZNK7android7Surface3dupEv)
+    STUB(_ZN7android7Surface6freezeEv)
+    STUB(_ZN7android7Surface13writeToParcelERKNS_2spIS0_EEPNS_6ParcelE)
+    STUB(_ZN7android7Surface24setTransparentRegionHintERKNS_6RegionE)
+    STUB(_ZN7android22EGLNativeWindowSurfaceC1ERKNS_2spINS_7SurfaceEEE)
+    STUB(_ZN7android7Surface13setFreezeTintEj)
+    STUB(_ZN7android7Surface4showEi)
+    
+    STUB(_ZNK7android6Region10toSkRegionEv)
+    STUB(_ZN7android6RegionC1ERK8SkRegion)
+    STUB(_ZNK7android6Region6boundsEv)
+
+    /* libmedia functions */
+    STUB(_ZN7android11AudioSystem7getModeEPi)
+    STUB(_ZN7android11AudioSystem15setVoiceClarityEi)
+    STUB(_ZN7android11AudioSystem15setLoopbackModeEi)
+    STUB(_ZN7android11AudioSystem20setFMRadioMultiSoundEv)
+    STUB(_ZN7android11AudioSystem13setDtmfVolumeEiihii)
+    STUB(_ZN7android11AudioSystem11setPadValueEiihii)
+    STUB(_ZN7android11AudioSystem10getRoutingEiPj)
+    STUB(_ZN7android11AudioSystem15setStreamVolumeEif) //This one has got one more parameter in current libmedia
+    STUB(_ZN7android11AudioRecord3setEijiiijPFviPvS1_ES1_ib) //signature changed
+    STUB(_ZN7android11AudioSystem10setAmpGainEiiii)
+    STUB(_ZN7android11AudioSystem10setRoutingEijj)
+    STUB(_ZN7android11AudioSystem13setMicAmpGainEiiii)
+    STUB(_ZN7android11AudioSystem17setVoccalIIRParamEiiii)
+    STUB(_ZN7android11AudioSystem11setPowerOffEv)
+    STUB(_ZN7android11AudioSystem14setNextEcParamEiiii)
+    STUB(_ZN7android11AudioSystem14setVoccalParamEiiii)
+    STUB(_ZN7android11AudioSystem12setParameterEPKcS2_)
+    STUB(_ZN7android11AudioSystem15getStreamVolumeEiPf)
+    STUB(_ZN7android11AudioSystem11setRxVolumeEiihii)
+    STUB(_ZN7android11AudioSystem8writeEFSEv)
+    STUB(_ZN7android11AudioSystem8writeMEMEv)
+
+    STUB(_ZN7android13ToneGeneratorC1Eif)
+    STUB(_ZN7android13ToneGenerator9startToneEi)
+
+    /* libsgl functions */
+    STUB(_ZN8SkCanvas9drawColorEjN12SkPorterDuff4ModeE)
+    STUB(_ZNK6SkPath13computeBoundsEP6SkRectNS_10BoundsTypeE)
+    STUB(_ZN8SkCanvas8drawARGBEjjjjN12SkPorterDuff4ModeE)
+    STUB(_ZN14SkImageDecoder12DecodeMemoryEPKvjP8SkBitmapNS2_6ConfigENS_4ModeE)
+    STUB(_ZN13SkColorFilter22CreatePorterDuffFilterEjN12SkPorterDuff4ModeE)
+#endif
+}
+
 
 typedef int (*JniRegFunc)(JNIEnv*);
 /*
