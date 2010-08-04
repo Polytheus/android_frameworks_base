@@ -366,5 +366,29 @@ status_t CameraParameters::dump(int fd, const Vector<String16>& args) const
     write(fd, result.string(), result.size());
     return NO_ERROR;
 }
+#define STUB(x) \
+int CameraParameters::x() const { \
+    LOGE("CameraParameters::%s() - stub\n", #x); \
+    return 0; \
+} 
+
+STUB(getMacro)
+STUB(getBrightness)
+STUB(getManualFocusValue)
+STUB(getFlicker)
+STUB(getFlashMode)
+STUB(getSceneMode)
+STUB(getZoomValue)
+STUB(getWBLighting)
+STUB(getImageQuality)
+STUB(getSuspendAutoFocus)
+STUB(getArcSoftCameraEnabledVal)
+STUB(getISO)
+STUB(getEffect)
+
+int CameraParameters::setMaxZoomValue(int v) {
+  LOGE("CameraParameters::setMaxZoomValue(int v = %d) - stub\n",v);
+  return 0; /* i don't know if this function should return anything or if this breaks something */
+}
 
 }; // namespace android

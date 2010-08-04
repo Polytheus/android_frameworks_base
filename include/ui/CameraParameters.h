@@ -66,6 +66,21 @@ public:
     int getOrientation() const;
     void setOrientation(int orientation);
 
+    int getMacro() const;
+    int getBrightness() const;
+    int getManualFocusValue() const;
+    int getFlicker() const;
+    int getFlashMode() const;
+    int getSceneMode() const;
+    int getZoomValue() const;
+    int getWBLighting() const;
+    int getImageQuality() const;
+    int getSuspendAutoFocus() const;
+    int getArcSoftCameraEnabledVal() const;
+    int getISO() const;
+    int getEffect() const;
+    int setMaxZoomValue(int);
+
     void dump() const;
     status_t dump(int fd, const Vector<String16>& args) const;
 
