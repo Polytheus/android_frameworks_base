@@ -40,16 +40,6 @@
 namespace android {
 // ----------------------------------------------------------------------------
 
-HeapInterface::HeapInterface() { }
-HeapInterface::~HeapInterface() { }
-
-// ----------------------------------------------------------------------------
-
-AllocatorInterface::AllocatorInterface() { }
-AllocatorInterface::~AllocatorInterface() { }
-
-// ----------------------------------------------------------------------------
-
 class SimpleMemory : public MemoryBase {
 public:
     SimpleMemory(const sp<IMemoryHeap>& heap, ssize_t offset, size_t size);
@@ -346,11 +336,6 @@ void SimpleBestFitAllocator::dump_l(String8& result,
 }
         
 // ----------------------------------------------------------------------------
-
-SharedHeap::SharedHeap() 
-    : HeapInterface(), MemoryHeapBase() 
-{ 
-}
 
 SharedHeap::SharedHeap(size_t size, uint32_t flags, char const * name)
     : MemoryHeapBase(size, flags, name)

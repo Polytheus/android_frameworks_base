@@ -205,12 +205,6 @@ sp<IMemoryHeap> BpMemory::getMemory(ssize_t* offset, size_t* size) const
 
 IMPLEMENT_META_INTERFACE(Memory, "android.utils.IMemory");
 
-BnMemory::BnMemory() {
-}
-
-BnMemory::~BnMemory() { 
-}
-
 status_t BnMemory::onTransact(
     uint32_t code, const Parcel& data, Parcel* reply, uint32_t flags)
 {
@@ -356,12 +350,6 @@ uint32_t BpMemoryHeap::getFlags() const {
 // ---------------------------------------------------------------------------
 
 IMPLEMENT_META_INTERFACE(MemoryHeap, "android.utils.IMemoryHeap");
-
-BnMemoryHeap::BnMemoryHeap() { 
-}
-
-BnMemoryHeap::~BnMemoryHeap() { 
-}
 
 status_t BnMemoryHeap::onTransact(
         uint32_t code, const Parcel& data, Parcel* reply, uint32_t flags)
