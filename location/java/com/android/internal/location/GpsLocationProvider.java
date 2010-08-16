@@ -71,7 +71,7 @@ public class GpsLocationProvider extends ILocationProvider.Stub {
     private static final String TAG = "GpsLocationProvider";
 
     private static final boolean DEBUG = true;
-    private static final boolean VERBOSE = false;
+    private static final boolean VERBOSE = true;
     
     /**
      * Broadcast intent action indicating that the GPS has either been
@@ -797,13 +797,21 @@ public class GpsLocationProvider extends ILocationProvider.Stub {
                 SystemClock.elapsedRealtime() + mFixInterval * 1000, mWakeupIntent);
     }
 
+    private void xtraTimeInjectionRequest() {
+        Log.e(TAG,"native code called xtraTimeInjectionRequest() - stub");
+    }
+
     /**
      * called from native code to update our position.
      */
     private void reportLocation(int flags, double latitude, double longitude, double altitude,
-            float speed, float bearing, float accuracy, long timestamp) {
+            float speed, float bearing, float accuracy, float unknown, long timestamp) {
+
         if (VERBOSE) Log.v(TAG, "reportLocation lat: " + latitude + " long: " + longitude +
                 " timestamp: " + timestamp);
+        
+        Log.i(TAG,"reportLocation() speed: " + speed +", bearing: " + bearing +", accuracy: " + accuracy + ", unknown: " + unknown);
+
 
         mLastFixTime = System.currentTimeMillis();
         // report time to first fix
@@ -992,6 +1000,13 @@ public class GpsLocationProvider extends ILocationProvider.Stub {
                         ((mSvMasks[USED_FOR_FIX_MASK] & (1 << (mSvs[i] - 1))) == 0 ? "" : "U"));
             }
         }
+
+        /* BUG workaround: the korean-v10t libloc-api does not send
+         * GPS_STATUS_SESSION_BEGIN (but does send GPS_STATUS_SESSION_END)
+         * so we emulate GPS_STATUS_SESSION_BEGIN when we receive the first location */
+        if( !mNavigating )
+          reportStatus(GPS_STATUS_SESSION_BEGIN);
+ 
 
         updateStatus(mStatus, svCount);
 
@@ -1304,6 +1319,7 @@ public class GpsLocationProvider extends ILocationProvider.Stub {
             if (Config.LOGD) Log.d(TAG, "NetworkThread exiting");
         }
         
+
         synchronized void xtraDownloadRequest() {
             mXtraDownloadRequested = true;
             notify();

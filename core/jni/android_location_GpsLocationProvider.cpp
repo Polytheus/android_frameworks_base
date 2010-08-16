@@ -27,6 +27,7 @@
 
 #include <string.h>
 #include <pthread.h>
+#include <stdlib.h>
 
 static pthread_mutex_t sEventMutex = PTHREAD_MUTEX_INITIALIZER;
 static pthread_cond_t sEventCond = PTHREAD_COND_INITIALIZER;
@@ -45,12 +46,25 @@ static const GpsPrivacyInterface* sGpsPrivacyInterface = NULL;
 static const GpsNiInterface* sGpsNiInterface = NULL;
 
 // data written to by GPS callbacks
+static long check1 = 0;
 static GpsLocation  sGpsLocation;
+static long check2 = 0;
 static GpsStatus    sGpsStatus;
+static long check3 = 0;
 static GpsSvStatus  sGpsSvStatus;
+static long check4 = 0;
 static AGpsStatus   sAGpsStatus;
+static long check5 = 0;
 static GpsNiNotification  sGpsNiNotification;
+static long check6 = 0;
 
+#define CHECK \
+  do { \
+    if(check1 || check2 || check3 || check4 || check5 || check6) { \
+        LOGE("GPS: Stackoverflow %ld %ld %ld %ld %ld %ld\n",check1,check2,check3,check4,check5,check6); \
+        abort(); \
+    } \
+  } while(false);
 // buffer for NMEA data
 #define NMEA_SENTENCE_LENGTH    100
 #define NMEA_SENTENCE_COUNT     40
@@ -86,6 +100,7 @@ namespace android {
 
 static void location_callback(GpsLocation* location)
 {
+    CHECK
     pthread_mutex_lock(&sEventMutex);
 
     sPendingCallbacks |= kLocation;
@@ -97,6 +112,7 @@ static void location_callback(GpsLocation* location)
 
 static void status_callback(GpsStatus* status)
 {
+    CHECK
     pthread_mutex_lock(&sEventMutex);
 
     sPendingCallbacks |= kStatus;
@@ -108,6 +124,7 @@ static void status_callback(GpsStatus* status)
 
 static void sv_status_callback(GpsSvStatus* sv_status)
 {
+    CHECK
     pthread_mutex_lock(&sEventMutex);
 
     sPendingCallbacks |= kSvStatus;
@@ -119,6 +136,7 @@ static void sv_status_callback(GpsSvStatus* sv_status)
 
 static void nmea_callback(GpsUtcTime timestamp, const char* nmea, int length)
 {
+    CHECK
     pthread_mutex_lock(&sEventMutex);
 
     if (length >= NMEA_SENTENCE_LENGTH) {
@@ -143,6 +161,7 @@ static void nmea_callback(GpsUtcTime timestamp, const char* nmea, int length)
 
 static void agps_status_callback(AGpsStatus* agps_status)
 {
+    CHECK
     pthread_mutex_lock(&sEventMutex);
 
     sPendingCallbacks |= kAGpsStatus;
@@ -162,6 +181,7 @@ GpsCallbacks sGpsCallbacks = {
 static void
 download_request_callback()
 {
+    CHECK
     pthread_mutex_lock(&sEventMutex);
     sPendingCallbacks |= kXtraDownloadRequest;
     pthread_cond_signal(&sEventCond);
@@ -171,6 +191,7 @@ download_request_callback()
 static void
 gps_ni_notify_callback(GpsNiNotification *notification)
 {
+   CHECK
    LOGD("gps_ni_notify_callback: notif=%d", notification->notification_id);
 
    pthread_mutex_lock(&sEventMutex);
@@ -278,10 +299,13 @@ static void android_location_GpsLocationProvider_delete_aiding_data(JNIEnv* env,
 
 static void android_location_GpsLocationProvider_wait_for_event(JNIEnv* env, jobject obj)
 {
+    CHECK
     pthread_mutex_lock(&sEventMutex);
     while (sPendingCallbacks == 0) {
         pthread_cond_wait(&sEventCond, &sEventMutex);
     }
+    
+    CHECK
 
     // copy and clear the callback flags
     int pendingCallbacks = sPendingCallbacks;
