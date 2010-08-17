@@ -145,9 +145,12 @@ KeyLayoutMap::load(const char* filename)
                 keycode = token_to_value(token.string(), KEYCODES);
                 //LOGI("%s:%d: got keycode %d for %s\n", filename, line, keycode, token.string() );
                 if (keycode == 0) {
-                    LOGE("%s:%d: expected keycode, got '%s'\n",
+                    LOGE("%s:%d: expected keycode, got '%s' - ignoring\n",
                             filename, line, token.string());
-                    goto done;
+                    //goto done;
+                    scancode = -1;
+                    keycode = -1;
+                    flags = 0;
                 }
                 state = FLAG;
                 break;
@@ -158,12 +161,12 @@ KeyLayoutMap::load(const char* filename)
                         //       " flags=0x%08x\n", scancode, keycode, flags);
                         Key k = { keycode, flags };
                         m_keys.add(scancode, k);
-                        state = SCANCODE;
-                        scancode = -1;
-                        keycode = -1;
-                        flags = 0;
-                        break;
                     }
+                    state = SCANCODE;
+                    scancode = -1;
+                    keycode = -1;
+                    flags = 0;
+                    break;
                 }
                 tmp = token_to_value(token.string(), FLAGS);
                 //LOGI("%s:%d: got flags %x for %s\n", filename, line, tmp, token.string() );
