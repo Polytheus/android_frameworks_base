@@ -518,7 +518,8 @@ public abstract class KeyInputQueue {
                     if (ev.type == RawInputEvent.EV_DEVICE_ADDED) {
                         synchronized (mFirst) {
                             di = newInputDevice(ev.deviceId);
-                            if (di.classes != 0) {
+                            //Slide Hall-ic is the keyboard-out/keyboard-in mechanism
+                            if (di.classes != 0 || di.name.equals("Slide Hall-ic") ) {
                                 // If this device is some kind of input class,
                                 // we care about it.
                                 mDevices.put(ev.deviceId, di);
