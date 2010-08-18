@@ -1114,6 +1114,7 @@ static void quickTest(void* arg)
 
 #ifdef NDEBUG
     #define REG_JNI(name) { name }
+    #define REG_IJNI(name,x) { name }
     struct RegJNIRec {
         int (*mProc)(JNIEnv*);
     };
@@ -1168,8 +1169,8 @@ static const RegJNIRec gRegJNI[] = {
     REG_JNI(register_com_android_internal_os_ZygoteInit/*, _ZN7android43register_com_android_internal_os_ZygoteInitEP7_JNIEnv*/),
     REG_JNI(register_com_android_internal_os_RuntimeInit/*, _ZN7android44register_com_android_internal_os_RuntimeInitEP7_JNIEnv*/),
     REG_JNI(register_android_nio_utils/*, _ZN7android26register_android_nio_utilsEP7_JNIEnv*/),
-
-#if 1
+    REG_IJNI(register_android_os_SystemProperties, _ZN7android36register_android_os_SystemPropertiesEP7_JNIEnv),
+    
     REG_JNI(register_android_graphics_Typeface),
     REG_JNI(register_android_graphics_Graphics),
     REG_JNI(register_android_graphics_Paint/*, _ZN7android31register_android_graphics_PaintEP7_JNIEnv*/),
@@ -1212,7 +1213,6 @@ static const RegJNIRec gRegJNI[] = {
     REG_JNI(register_android_view_Display/*, _ZN7android29register_android_view_DisplayEP7_JNIEnv*/),
     REG_JNI(register_android_view_ViewRoot/*, _ZN7android30register_android_view_ViewRootEP7_JNIEnv*/),
     REG_JNI(register_android_opengl_classes/*, _ZN7android31register_android_opengl_classesEP7_JNIEnv*/),
-#endif
 
     REG_IJNI(register_android_backup_BackupHelperDispatcher, _ZN7android46register_android_backup_BackupHelperDispatcherEP7_JNIEnv),
     REG_IJNI(register_android_message_digest_sha1, _Z36register_android_message_digest_sha1P7_JNIEnv),
