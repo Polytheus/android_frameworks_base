@@ -80,6 +80,7 @@ LOCAL_SRC_FILES+= \
 	android_opengl_GLES11Ext.cpp \
 	android/opengl/poly_clip.cpp.arm \
 	android/opengl/util.cpp.arm \
+	android_hardware_SensorManager.cpp \
 
 
 LOCAL_SRC_FILES += \
@@ -137,7 +138,6 @@ LOCAL_SRC_FILES+= \
 OLD_LOCAL_SRC := \
 	android_net_wifi_Wifi.cpp \
 	android_location_GpsLocationProvider.cpp \
-	android_hardware_SensorManager.cpp \
 
 
 LOCAL_C_INCLUDES += \

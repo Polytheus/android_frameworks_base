@@ -1243,14 +1243,13 @@ static const RegJNIRec gRegJNI[] = {
     REG_IJNI(register_android_backup_BackupDataInput, _ZN7android39register_android_backup_BackupDataInputEP7_JNIEnv),
     REG_IJNI(register_android_backup_FileBackupHelperBase, _ZN7android44register_android_backup_FileBackupHelperBaseEP7_JNIEnv),
     REG_IJNI(register_android_hardware_Camera, _Z32register_android_hardware_CameraP7_JNIEnv),
+    REG_IJNI(register_android_hardware_SensorManager, _Z39register_android_hardware_SensorManagerP7_JNIEnv),
 };
 
 //See extractRegisterFunc script under my-system/
 //If you move to above, delete below
 static const RegEJNIRec gRegExternalJNI[] = {
     
-    REG_EJNI(register_android_hardware_SensorManager, _Z39register_android_hardware_SensorManagerP7_JNIEnv),
-
     //REG_IJNI(register_android_os_Exec, _ZN7android24register_android_os_ExecEP7_JNIEnv), //missing in eclair
     //REG_IJNI(register_android_bluetooth_Database, _ZN7android35register_android_bluetooth_DatabaseEP7_JNIEnv), //missing in eclair
     //REG_EJNI(register_android_hardware_fm_FMRxAPI, _Z36register_android_hardware_fm_FMRxAPIP7_JNIEnv),
@@ -1281,7 +1280,6 @@ static const RegEJNIRec gRegExternalJNI[] = {
     //REG_EJNI(register_android_bluetooth_BluetoothAudioGateway, _ZN7android48register_android_bluetooth_BluetoothAudioGatewayEP7_JNIEnv),
     //REG_EJNI(register_android_server_BluetoothEventLoop, _ZN7android42register_android_server_BluetoothEventLoopEP7_JNIEnv),
     //REG_EJNI(register_android_server_BluetoothA2dpService, _ZN7android44register_android_server_BluetoothA2dpServiceEP7_JNIEnv), //try stock one
-    //REG_EJNI(register_android_location_GpsLocationProvider, _ZN7android45register_android_location_GpsLocationProviderEP7_JNIEnv),
     //REG_EJNI(register_android_server_BluetoothDeviceService, _ZN7android46register_android_server_BluetoothDeviceServiceEP7_JNIEnv),
     /* bluetooth - common with eclair end */
 };
