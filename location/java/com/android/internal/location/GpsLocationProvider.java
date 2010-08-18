@@ -1407,4 +1407,8 @@ public class GpsLocationProvider extends ILocationProvider.Stub {
 
     // Network-initiated (NI) Support
     private native void native_send_ni_response(int notificationId, int userResponse);
+
+    //Unused
+    private native void reportAirtestResult(int a,int b,int c,int d,int e);
+    private native void reportFactoryTestResult(int a);
 }
