@@ -115,9 +115,7 @@ LOCAL_SRC_FILES+= \
 	android_util_XmlBlock.cpp \
 	android_util_Base64.cpp \
 	android_debug_JNITest.cpp \
-	android_util_FileObserver.cpp 
-	
-OLD_LOCAL_SRC +=\
+	android_util_FileObserver.cpp \
 	android_bluetooth_HeadsetBase.cpp \
 	android_bluetooth_common.cpp \
 	android_bluetooth_BluetoothAudioGateway.cpp \

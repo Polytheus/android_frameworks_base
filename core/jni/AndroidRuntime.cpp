@@ -1244,6 +1244,14 @@ static const RegJNIRec gRegJNI[] = {
     REG_IJNI(register_android_backup_FileBackupHelperBase, _ZN7android44register_android_backup_FileBackupHelperBaseEP7_JNIEnv),
     REG_IJNI(register_android_hardware_Camera, _Z32register_android_hardware_CameraP7_JNIEnv),
     REG_IJNI(register_android_hardware_SensorManager, _Z39register_android_hardware_SensorManagerP7_JNIEnv),
+
+    REG_JNI(register_android_bluetooth_HeadsetBase),
+    REG_JNI(register_android_bluetooth_BluetoothAudioGateway),
+    REG_JNI(register_android_bluetooth_BluetoothSocket),
+    REG_JNI(register_android_bluetooth_ScoSocket),
+    REG_JNI(register_android_server_BluetoothService),
+    REG_JNI(register_android_server_BluetoothEventLoop),
+    REG_JNI(register_android_server_BluetoothA2dpService),
 };
 
 //See extractRegisterFunc script under my-system/
