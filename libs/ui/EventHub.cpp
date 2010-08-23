@@ -695,10 +695,15 @@ int EventHub::open_device(const char *deviceName)
         for (char *p = strchr(tmpfn, ' '); p && *p; p = strchr(tmpfn, ' '))
             *p = '_';
 
+        char klPropName[300];
+        char keylayoutfile[PROPERTY_VALUE_MAX];
+        snprintf(klPropName, sizeof(klPropName), "persist.keylayout.%s", tmpfn);
+        property_get(klPropName, keylayoutfile, tmpfn);
+
         // find the .kl file we need for this device
         const char* root = getenv("ANDROID_ROOT");
         snprintf(keylayoutFilename, sizeof(keylayoutFilename),
-                 "%s/usr/keylayout/%s.kl", root, tmpfn);
+                 "%s/usr/keylayout/%s.kl", root, keylayoutfile);
         bool defaultKeymap = false;
         if (access(keylayoutFilename, R_OK)) {
             snprintf(keylayoutFilename, sizeof(keylayoutFilename),
